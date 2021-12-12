@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');
+
+.My-Okis {
+  background: linear-gradient(#f1ffe1, #f1cff3);
+  min-height: 100vh;
+  padding-top: 2rem;
+}
+
+.my-okis-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10rem;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.my-okis-title {
+  font-size: 4.2rem;
+  text-align: center;
+}
+
+.Oki-Resume {
+  background: linear-gradient(#f1ffe1, #f1cff3);
+  min-height: 100vh;
+  padding: 5rem;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins';
+  color: #272323;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f1cff3;
+}
+
+.container-home {
+  max-width: 100%;
+  max-height: 100vh;
+  padding: 60px 0 0 0;
+  text-align: left;
+}
+
+.grid-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.item {
+  padding-right: 0.5rem;
+  color: #282c34;
+  font-weight: 400;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  padding: 9px 16px;
+  max-height: 65px;
+  border-color: #87aeff;
+  color: #b171f2;
+  background-color: white;
+  border-radius: 8px;
+  align-items: center;
+  font-size: 16px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.uploadFile {
+  border: 4px dashed rgba(4, 4, 5, 0.1);
+  border-radius: 16px;
+  text-align: center;
+  padding: 32px 60px;
+}
+
+@media only screen and (max-width: 600px) {
+  
+  .container-home {
+    width: auto;
+    min-height: 100vh;
+    text-align: center;
+  }
+  
+}

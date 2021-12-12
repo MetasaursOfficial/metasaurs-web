@@ -1,0 +1,266 @@
+.wallet-container {
+  display: flex;
+  /* flex-direction: row; */
+  /* padding: 0 8rem; */
+  justify-content: space-between;
+  /* align-items: center; */
+}
+
+.wallet-button {
+  margin-left: auto;
+  background-color: #df8bff;
+  border: 2px solid #b25cf4;
+  color: white;
+  box-sizing: border-box;
+  border-radius: 5px;
+  min-width: 15rem;
+}
+.padding-text {
+  padding: 20px;
+  width: 388px;
+}
+
+.oki-icon {
+  width: 7rem;
+  height: auto;
+  margin: 0.1rem;
+  margin-top: -20px;
+}
+.oki-icon:hover {
+  cursor: pointer;
+}
+
+.image-medium {
+  width: 29.75rem;
+  margin: 1rem;
+  border-radius: 15px;
+}
+
+.mint-section-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  color: #3d465d;
+  height: 80vh;
+}
+
+.icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0.5;
+  padding: 1rem;
+  color: #3d465d;
+}
+
+.mint-title {
+  font-size: 3rem;
+  font-weight: 900;
+}
+
+.mint-container {
+  display: flex;
+  flex-direction: column;
+  flex: 0.5;
+  color: #272323;
+  padding: 1rem;
+}
+
+.mint-buttons-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-between;
+}
+
+.amount-button-left {
+  background-color: #f1ffe1;
+  border: 2px solid #3d465dcc;
+  box-sizing: border-box;
+  border-radius: 10px 0 0 10px;
+  color: #f9788c;
+  margin-left: 0rem;
+  font-size: 1.5rem;
+}
+
+.amount-button-left:hover {
+  background-color: #f9788c;
+  color: #f1ffe1;
+}
+
+.amount-button-right {
+  color: #f9788c;
+  background-color: #f1ffe1;
+  border: 2px solid #3d465dcc;
+  box-sizing: border-box;
+  border-radius: 0 10px 10px 0;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+}
+
+.amount-button-right:hover {
+  background-color: #f9788c;
+  color: #f1ffe1;
+}
+
+.amount-button-center {
+  color: #f9788c;
+  background-color: #f1ffe1;
+  border: 2px solid #3d465dcc;
+  box-sizing: border-box;
+  border-radius: 0;
+  width: 5rem;
+  font-size: 1.5rem;
+}
+
+.button-primary {
+  background-color: #f9788c;
+  border: 2px solid #3d465d;
+  color: #f1ffe1;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 19rem;
+  font-size: 1.5rem;
+}
+
+.button-primary:hover {
+  background-color: #f1ffe1;
+  border: 2px solid #f9788c;
+  color: #f9788c;
+}
+.button-primary:disabled {
+  background-color: #3d465d;
+  border: 2px solid #f1ffe1;
+  color: #f1ffe1;
+}
+
+.mint-paragraph {
+  max-width: 70%;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.mint-amount-text {
+  width: 90%;
+}
+
+.rarity-paragraph {
+  max-width: 50%;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.mint-progress-header {
+  display: flex;
+  width: 100%;
+  min-height: 5rem;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #b25cf4;
+  color: white;
+  padding: 0 0.5rem;
+  flex-direction: column;
+}
+
+.mint-progress-text {
+  color: white;
+  font-size: 1.2rem;
+  text-align: center;
+}
+.plus-minus {
+  width: auto;
+}
+.Image-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+@media only screen and (max-width: 1100px) {
+  .Image-flex {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+  }
+  .mint-paragraph {
+    max-width: 100%;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  .mint-buttons-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: center;
+  }
+  .mint-amount-text {
+    width: 100%;
+    text-align: center;
+  }
+  .rarity-paragraph {
+    max-width: 100%;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+
+  }
+}
+@media only screen and (max-width: 600px) {
+  .mint-section-container {
+    height: 50vh;
+  }
+  .plus-minus {
+    width: 100%;
+  }
+  .button-primary {
+    width: 100%;
+  }
+  .padding-text {
+    padding: 7px;
+    width: auto;
+    margin-bottom: 20px;
+  }
+  .image-medium {
+    width: 100%;
+    margin: 0rem;
+  }
+
+  .mint-section-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .mint-container {
+    padding: 0.1rem;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 0.9rem;
+  }
+
+  .oki-icon {
+    width: 5rem;
+    height: auto;
+    margin-top: -10px;
+  }
+
+  .mint-title {
+    font-size: 1.5rem;
+  }
+
+  .mint-paragraph {
+    max-width: 90%;
+    font-size: 0.9rem;
+  }
+  .wallet-button {
+    min-width: 5rem;
+  }
+
+  .mint-buttons-container {
+    flex-direction: column;
+    min-height: 10rem;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+}

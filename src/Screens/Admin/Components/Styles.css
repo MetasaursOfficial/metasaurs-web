@@ -1,0 +1,19 @@
+.mint-whitelist-container {
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+}
+
+.whitelist-form-container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-height: 10vh;
+	padding: 2rem;
+	align-items: center;
+}
+
+.whitelist-text {
+	width: 60%;
+	font-size: 1.1rem;
+	text-align: center;
+}

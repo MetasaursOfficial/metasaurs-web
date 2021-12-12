@@ -1,0 +1,24 @@
+.admin-screen {
+	background: linear-gradient(#F1FFE1, #F1CFF3);
+	min-height: 100vh;
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+}
+
+.form-container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 3rem;
+}
+
+.input-container {
+	margin: 1rem;
+	height: 1.5rem;
+}
+
+.address-input {
+	height: 15rem;
+	width: 80%;
+}
