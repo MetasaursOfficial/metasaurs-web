@@ -1,10 +1,11 @@
 import './App.css';
-import HomeScreen from "./Screens/HomeScreen";
+import MetaSasurScreen from "./Screens/MetaSasurScreen";
 
 function App() {
   return (
-    <div className="App App-header">
-      <HomeScreen />
+    <div className="App">
+      <MetaSasurScreen />
+      
     </div>
   );
 }

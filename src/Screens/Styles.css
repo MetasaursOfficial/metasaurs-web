@@ -85,6 +85,52 @@ button {
   text-align: center;
   padding: 32px 60px;
 }
+/* sdf */
+
+.sale-coming {
+  text-align: center;
+  color: #FFEE00;
+  margin-top: 20px !important;
+  font-weight: bolder !important;
+  /* font-family: Obvia !important; */
+}
+.image-margin {
+  margin-top: 40px !important;
+}
+.presale-coming {
+  text-align: center;
+  color: #FFEE00;
+  margin-top: 20px !important;
+  font-weight: bolder !important;
+}
+.white-coming {
+  text-align: center;
+  color: white;
+  margin-top: 7px !important;
+  font-weight: bolder !important;
+}
+.red-punk{
+  margin-top: 50px;
+}
+.green-punk{
+  margin-top: 50px;
+
+}
+.mobile-view{
+  display: none;
+  margin-bottom: 0px !important;
+
+}
+.dropdown-quantity{
+  width: 292px !important;
+  border: 2px solid #59AE0F !important;
+  background-color: transparent !important;
+  margin-top: 50px !important;
+  color: white !important;
+}
+.dropdown-quantity .MuiFormLabel-root,.dropdown-quantity>div .MuiSelect-icon{
+  color: #ffffff !important;
+}
 
 @media only screen and (max-width: 600px) {
   
@@ -92,6 +138,22 @@ button {
     width: auto;
     min-height: 100vh;
     text-align: center;
+  }
+  .red-punk{
+    display: none;
+  }
+  .green-punk{
+    display: none;
+  }
+  .image-margin {
+    width: 100% !important;
+  }
+  .sale-coming  {
+    font-size: 40px !important;
+  }
+  .mobile-view{
+    display: flex;
+    margin-bottom: 10px;
   }
   
 }

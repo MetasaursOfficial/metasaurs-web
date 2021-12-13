@@ -1,10 +1,10 @@
 .App {
   text-align: center;
-  background-color: #87AEFF
+   /* background-color: #87AEFF */
 }
 
-.App-header {
-  background-image: url('../src/assets/Whale_0001.png'),
+/* .App-header {
+  background-image: url('../src/assets/maskgroup1.png'),
     linear-gradient(rgba(135, 174, 255, 0.9), rgba(240, 207, 242, 0.9)),
     url('../src/assets/clouds.png');
   background-repeat: no-repeat;
@@ -33,4 +33,4 @@
     linear-gradient(#87aeff, #f2fee2);
   background-repeat: no-repeat;
   background-size: cover;
-}
+} */
