@@ -1,9 +1,6 @@
 .wallet-container {
   display: flex;
-  /* flex-direction: row; */
-  /* padding: 0 8rem; */
   justify-content: space-between;
-  /* align-items: center; */
 }
 
 .wallet-button {
@@ -20,13 +17,12 @@
   width: 388px;
 }
 
-.oki-icon {
-  width: 7rem;
+.wallet-icon {
+  width: 10rem;
   height: auto;
-  margin: 0.1rem;
-  margin-top: -20px;
+  margin: -20px 0.1rem 0.1rem;
 }
-.oki-icon:hover {
+.wallet-icon:hover {
   cursor: pointer;
 }
 
@@ -239,7 +235,7 @@
     font-size: 0.9rem;
   }
 
-  .oki-icon {
+  .wallet-icon {
     width: 5rem;
     height: auto;
     margin-top: -10px;

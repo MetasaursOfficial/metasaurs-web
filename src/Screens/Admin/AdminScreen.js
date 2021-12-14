@@ -232,16 +232,21 @@ const AdminScreen = () => {
 				{
 					isOwner && (
 						<>
-							<MintOwner onPress={handleReserveNFT} loading={false}/>
+							<div className="admin-text">Function to make the fist mint</div>
 							<button
+								className="admin-button"
 								onClick={handlePauseFirst}>
 								{contractInfo?.pausedFirst ? "Resume First" : "Pause First"}
 							</button>
+							<div className="admin-text">Function to make the Public mint</div>
 							<button
+								className="admin-button"
 								onClick={handlePausePublic}>
 								{contractInfo?.pausedPublic ? "Resume Public" : "Pause Public"}
 							</button>
+							<div className="admin-text">Function to make the Public mint</div>
 							<button
+								className="admin-button"
 								onClick={handlePauseWhitelist}>
 								{contractInfo?.pausedWhitelist ? "Resume Whitelist" : "Pause Whitelist"}
 							</button>
@@ -254,7 +259,9 @@ const AdminScreen = () => {
 								onChange={onInputChange}
 							/>
 							
-							<button onClick={handleSetURIPressed}>Update Token URI</button>
+							<button
+								className="admin-button"
+								onClick={handleSetURIPressed}>Update Token URI</button>
 							<RootForm onSubmit={handleSubmitRoot} />
 							<MintSection
 								show={contractInfo}
@@ -277,8 +284,11 @@ const AdminScreen = () => {
 								paused={contractInfo?.pausedWhitelist}
 								label="Mint Whitelist"
 							/>
-							<h3>Amount</h3>
-							<button onClick={() => handleWithdraw()}>Withdraw</button>
+							<h4>Sent the eth on the contract to the owners wallet</h4>
+							<div className="admin-text">No transaction record is created on the ower's wallet</div>
+							<button
+								className="admin-button"
+								onClick={() => handleWithdraw()}>Withdraw</button>
 						</>
 					)
 					

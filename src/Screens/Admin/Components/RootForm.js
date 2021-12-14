@@ -25,7 +25,9 @@ const RootForm = ({onSubmit}) => {
 				onChange={onAmountChange}
 				className="input-container"
 			/>
-			<button onClick={handleWhiteListAddressButton}>Set Root</button>
+			<button
+				className="admin-button"
+				onClick={handleWhiteListAddressButton}>Set Root</button>
 		</div>
 	)
 }
