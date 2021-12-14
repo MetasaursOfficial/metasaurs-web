@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');
 
 .My-Okis {
-  background: linear-gradient(#f1ffe1, #f1cff3);
   min-height: 100vh;
   padding-top: 2rem;
 }
@@ -22,7 +21,6 @@
 }
 
 .Oki-Resume {
-  background: linear-gradient(#f1ffe1, #f1cff3);
   min-height: 100vh;
   padding: 5rem;
 }
@@ -33,7 +31,6 @@ body {
   color: #272323;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f1cff3;
 }
 
 .container-home {
@@ -128,6 +125,7 @@ button {
   margin-top: 50px !important;
   color: white !important;
 }
+
 .dropdown-quantity .MuiFormLabel-root,.dropdown-quantity>div .MuiSelect-icon{
   color: #ffffff !important;
 }

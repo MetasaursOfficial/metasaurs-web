@@ -1,11 +1,11 @@
 import React, {useRef, useState} from "react";
 import logo from "../assets/Groupmeta.png";
 import mint from "../assets/mintgroup.png";
-import punkgreen from "../assets/punkgreen.png";
-import punkred from "../assets/punkred.png";
+import punkGreen from "../assets/punkgreen.png";
+import punkRed from "../assets/punkred.png";
 import coming from "../assets/coming.png";
-import mobileredpunk from '../assets/mobile-red-punk.png';
-import mobilegreenpunk from '../assets/mobile-green-punk.png';
+import mobileRedPunk from '../assets/mobile-red-punk.png';
+import mobileGreenPunk from '../assets/mobile-green-punk.png';
 
 import {
   Typography,
@@ -192,8 +192,13 @@ const MetasaursMain = () => {
   
   const isWalletAddress = (_walletAddress) => {
     return _walletAddress !== "";
-    
   }
+  
+  const renderSelectField = () => (
+    <Typography variant="h5" className="white-coming">
+      {quantity}
+    </Typography>
+  );
   
   const handleChange = (value) => {
     setQuantity(value);
@@ -203,14 +208,14 @@ const MetasaursMain = () => {
       <InstallBanner show={status === "METAMASK_NOT_INSTALLED"}/>
       <WalletHeader connectWalletPressed={connectWalletPressed} walletAddress={walletAddress} loading={loadingWallet}/>
       <MintProgressHeader show={transaction.verifying} link={getTransactionURL(transaction.txHash)}/>
-      <img src={logo} className="image-margin" />
+      <img src={logo} className="image-margin" alt={"logo"}/>
       <Typography variant="h2" className="sale-coming">
         {preSale}
       </Typography>
-      <img src={mint} className="image-margin" />
+      <img src={mint} className="image-margin" alt={"Steps"} />
       <Grid container spacing={3}>
         <Grid item lg={4} className="green-punk">
-          <img src={punkgreen} width={"100%"} height={"500px"} />
+          <img src={punkGreen} width={"100%"} height={"500px"} alt="Punk Green" />
         </Grid>
         <Grid item lg={4}>
           <Typography variant="h4" className="presale-coming">
@@ -244,16 +249,16 @@ const MetasaursMain = () => {
               <MenuItem>{x}</MenuItem>
             ))}
           </TextField>
-          <img src={coming} />
+          <img src={coming} alt="coming"/>
         </Grid>
 
         <Grid item lg={4} className="red-punk">
-          <img src={punkred} width={"100%"} height={"500px"} />
+          <img src={punkRed} width={"100%"} height={"500px"} alt="punk red"/>
         </Grid>
       </Grid>
       <Box className="mobile-view">
-        <img src={mobilegreenpunk} width={"50%"}/>
-        <img src={mobileredpunk} width={"50%"}/>
+        <img src={mobileGreenPunk} width={"50%"} alt="Green punk mobile"/>
+        <img src={mobileRedPunk} width={"50%"} alt="Red punk mobile"/>
       </Box>
     </Container>
   );
