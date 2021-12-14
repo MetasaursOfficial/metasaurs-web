@@ -25,7 +25,7 @@ const publicSale = "Public Sale";
 const publicTime = " Friday, December 17th @ 3:00PM EST";
 const quantityArray = ["1", "2", "3", "4", "5", "6"];
 
-const MetaSasurScreen = () => {
+const MetasaursMain = () => {
   const [quantity, setQuantity] = useState("");
   const handleChange = (value) => {
     setQuantity(value);
@@ -88,4 +88,4 @@ const MetaSasurScreen = () => {
   );
 };
 
-export default MetaSasurScreen;
+export default MetasaursMain;

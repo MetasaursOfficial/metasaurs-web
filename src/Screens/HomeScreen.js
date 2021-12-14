@@ -3,26 +3,22 @@ import './Styles.css';
 
 import {
 	confirmEtherTransaction,
-	getContractData,
-	mintFirstStage, mintWhitelist,
+	getContractData, mintFirst,
+	mintFirstStage,
+	mintWhitelist,
 } from "../Integrations/Contracts/ContractManager";
 import {connectWallet, getCurrentWalletConnected} from "../Integrations/Wallet";
 import WalletHeader from "./Components/WalletHeader";
 import MintSection from "./Components/MintSection";
-import MyWalletSection from "./Sections/MainMyWallet/MyWalletSection";
-import MintingModal from "./Modals/MintingModal";
 import ErrorModal from "./Modals/ErrorModal";
-import StudySection from "./Sections/TheStudy/StudySection";
-import CreatorsClub from "./Sections/Creators/CreatorsClub";
 import MainFooter from "./Footers/MainFooter";
 import '../App.css'
 import {useNavigate} from "react-router-dom";
 import MintProgressHeader from "./Components/MintProgressHeader";
 import InstallBanner from "./Components/InstallBanner";
 import GasFeeModal from "./Modals/GasFeeModal";
-import {show} from "react-modal/lib/helpers/ariaAppHider";
-import * as url from "url";
 import VideoModal from "./Modals/VideoModal";
+import MetasaursMain from "./MetasaursMain";
 
 const delay = 5;
 
@@ -45,7 +41,7 @@ const HomeScreen = () => {
 		async function fetchWalletData() {
 			setLoadingWallet(true)
 			const {address, status, error} = await getCurrentWalletConnected(window);
-			if (error){
+			if (error) {
 				setShowError({show: true, message: error.toString()})
 			}
 			setLoadingWallet(false);
@@ -70,7 +66,7 @@ const HomeScreen = () => {
 	
 	useEffect(() => {
 		timer.current = setInterval(() => {
-			if (loadingWallet){
+			if (loadingWallet) {
 				const message = "Having issues connecting your wallet? Try refreshing the browser"
 				setShowError({show: true, message})
 			}
@@ -120,13 +116,13 @@ const HomeScreen = () => {
 		addWalletListener()
 	}
 	
-	const handleWalletError =  (error) => {
+	const handleWalletError = (error) => {
 		const code = error.code;
 		const message = error.message;
 		
-		if (message === "Already processing eth_requestAccounts. Please wait."){
+		if (message === "Already processing eth_requestAccounts. Please wait.") {
 			const content = "Please confirm on your metamask extension"
-			setShowError({show: true, message:content})
+			setShowError({show: true, message: content})
 		} else {
 			setShowError({show: true, message})
 		}
@@ -139,7 +135,7 @@ const HomeScreen = () => {
 		if (response.error) {
 			console.log("verifyTransaction error: ", response.error)
 		} else {
-			if (response.status){
+			if (response.status) {
 				handleSuccessfulMint(txHash)
 			} else {
 				displayErrorTransaction(txHash)
@@ -154,7 +150,7 @@ const HomeScreen = () => {
 	}
 	
 	const getTransactionURL = (txHash) => {
-		return 'https://etherscan.io/tx/'+txHash;
+		return 'https://etherscan.io/tx/' + txHash;
 	}
 	
 	const displayErrorTransaction = (txHash) => {
@@ -164,10 +160,10 @@ const HomeScreen = () => {
 	const onMintFirstStagePressed = async (amount) => {
 		setLoadingMintData(true);
 		setShowGasFeeDialog(true);
-		const response = await mintFirstStage(amount);
+		const response = await mintFirst(amount);
 		setLoadingMintData(false)
 		setShowGasFeeDialog(false)
-
+		
 		if (response.error) {
 			console.log("onMintFirstStagePressed error: ", response.error)
 			handleError(response.error)
@@ -204,8 +200,8 @@ const HomeScreen = () => {
 		setShowError({show: true, message})
 	}
 	
-	const handleUnknownError = (error) =>  {
-		if (error.message ){
+	const handleUnknownError = (error) => {
+		if (error.message) {
 			setShowError({show: true, message: error.message})
 		} else {
 			setShowError({show: true, message: error.toString()})
@@ -235,14 +231,14 @@ const HomeScreen = () => {
 	
 	const handlePlayVideoURL = (url) => {
 		console.log("handlePlayVideoURL: ", url)
-		setShowVideo({show:true, url:url});
+		setShowVideo({show: true, url: url});
 	}
 	
 	return (
 		<div className="container-home">
-			<InstallBanner show={status === "METAMASK_NOT_INSTALLED"} />
+			<InstallBanner show={status === "METAMASK_NOT_INSTALLED"}/>
 			<WalletHeader connectWalletPressed={connectWalletPressed} walletAddress={walletAddress} loading={loadingWallet}/>
-			<MintProgressHeader show={transaction.verifying} link={getTransactionURL(transaction.txHash)} />
+			<MintProgressHeader show={transaction.verifying} link={getTransactionURL(transaction.txHash)}/>
 			<MintSection
 				show={contractInfo}
 				contractInfo={contractInfo}
@@ -253,25 +249,20 @@ const HomeScreen = () => {
 				isWalletAddress={isWalletAddress(walletAddress)}
 				connectWalletPressed={connectWalletPressed}
 			/>
-			<MyWalletSection
-				tokens={contractInfo?.addressTokens}
-				fistStageTokens={contractInfo ? contractInfo.totalSupply : 0 }
-			/>
-			<StudySection walletAddress={walletAddress} onPlayVideoURL={handlePlayVideoURL}/>
-			<CreatorsClub />
-			<MainFooter />
+			<MetasaursMain/>
+			<MainFooter/>
 			<GasFeeModal showModal={showGasFeeDialog} onClose={() => setShowGasFeeDialog(false)}/>
 			<ErrorModal
 				showModal={showError.show}
 				message={showError.message}
 				onClose={() => {
-					setShowError({show:false, message: ""})
+					setShowError({show: false, message: ""})
 				}}
 			/>
 			<VideoModal
 				show={showVideo.show}
 				url={showVideo.url}
-				onClose={() => setShowVideo({show: false, url:null})}/>
+				onClose={() => setShowVideo({show: false, url: null})}/>
 		</div>
 	)
 	

@@ -4,8 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import MyOkisScreen from "./Screens/MyOkisScreen";
-import OkiDetails from "./Screens/OkiDetails";
 import TransactionScreen from "./Screens/Transaction/TransactionScreen";
 import AdminScreen from "./Screens/Admin/AdminScreen";
 
@@ -13,9 +11,7 @@ ReactDOM.render(
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<App />} />
-				<Route path="/my-okis" element={<MyOkisScreen />} />
 				<Route path="/admin" element={<AdminScreen />} />
-				<Route path="/okis/:tokenId"  element={<OkiDetails />} />
 				<Route path="/transaction/:txHash"  element={<TransactionScreen />} />
 				<Route
 					path="*"

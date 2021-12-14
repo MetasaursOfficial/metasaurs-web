@@ -4,12 +4,12 @@ let contractABIMetadataABI;
 let contractAddress;
 
 if (environment === "DEV") {
-	contractABIMetadataABI = require("../../Contracts/IkoContract/IkoContract.json");
-	const response = require('../../Contracts/IkoContract/Address')
+	contractABIMetadataABI = require("../../Contracts/TestContract/TestContract.json");
+	const response = require('../../Contracts/TestContract/Address')
 	contractAddress = response.contractAddress;
 } else {
-	contractABIMetadataABI = require("../../Contracts/OKI/OkiContract.json");
-	const response = require('../../Contracts/OKI/Address')
+	contractABIMetadataABI = require("../../Contracts/TestContract/TestContract.json");
+	const response = require('../../Contracts/TestContract/Address')
 	contractAddress = response.contractAddress;
 }
 
