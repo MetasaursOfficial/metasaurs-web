@@ -29,6 +29,7 @@ export const getContractData = async (_address) => {
 		let pausedWhitelist = false;
 		let revealed = false;
 		let baseUri;
+		let notRevealedURI;
 		
 		try {
 			merkleRoot = await window.contract.methods.merkleRoot().call();
@@ -44,13 +45,14 @@ export const getContractData = async (_address) => {
 			pausedWhitelist = await window.contract.methods.pausedWhitelist().call();
 			revealed = await window.contract.methods.revealed().call();
 			baseUri = await window.contract.methods.baseUri().call();
+			notRevealedURI = await window.contract.methods.notRevealedUri().call();
 		} catch (e) {
 			console.log("Error getting getContractData: ", e);
 		}
 		
 		let hasTokens = false;
 		
-		try{
+		try {
 			const response = await addressHasTokens(_address)
 			hasTokens = response.hasTokens
 		} catch (e) {
@@ -63,7 +65,7 @@ export const getContractData = async (_address) => {
 			merkleRoot,
 			pausedFirst,
 			pausedPublic,
-			pausedWhitelist, revealed, baseUri, hasTokens
+			pausedWhitelist, revealed, baseUri, hasTokens, notRevealedURI
 		}
 	} catch (e) {
 		console.log('getContractData error: ', e)
@@ -132,6 +134,7 @@ export const setPausedWhitelist = (_value, _address) => {
 }
 
 export const setNotRevealedURI = (_value, _address) => {
+	console.log("setNotRevealedURI: ", _value, _address)
 	return new Promise(async resolve => {
 		try {
 			window.contract = await new web3.eth.Contract(contractABI, contractAddress);
@@ -241,7 +244,7 @@ export const getTokenURI = async (_tokenId) => {
 		let tokenURI;
 		try {
 			tokenURI = await window.contract.methods.tokenURI(_tokenId).call();
-			console.log("tokenURI", tokenURI)
+			console.log("tokenURI: ", tokenURI)
 			return {
 				error: null,
 				tokenURI: tokenURI,
@@ -295,9 +298,9 @@ export const getPriceForMultiple = (_amount, value) => {
 	const multiplier = (_amount - 1);
 	const baseMultiple = 60000000000000000;
 	const partial = multiplier * baseMultiple;
-	const totalValue = value +  partial;
+	const totalValue = value + partial;
 	
-	return  Number((totalValue)).toString(16)
+	return Number((totalValue)).toString(16)
 }
 
 export const mintFirst = async (_amount = 1) => {
@@ -560,6 +563,7 @@ export const setTokenURI = async (newTokenURI, _address) => {
 		return {error: e}
 	}
 }
+
 
 export const withdrawContract = (_address) => {
 	

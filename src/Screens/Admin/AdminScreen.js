@@ -8,7 +8,8 @@ import {
 	setPausedFirst, setPausedPublic,
 	setPausedWhitelist,
 	setTokenURI,
-	withdrawContract
+	withdrawContract,
+	setNotRevealedURI, getAddressTokens, getTokenURI
 } from "../../Integrations/Contracts/ContractManager";
 import {connectWallet, getCurrentWalletConnected} from "../../Integrations/Wallet";
 import {useNavigate} from "react-router-dom";
@@ -26,7 +27,9 @@ const AdminScreen = () => {
 	const [contractInfo, setContractInfo] = useState(null);
 	const [isOwner, setIsOwner] = useState(false);
 	const [tokenUri, setTokenUri] = useState("")
+	const [notRevealedValue, setNotRevealedValue] = useState("")
 	const [loadingMintData, setLoadingMintData] = useState(true);
+	const [addressTokens, setAddressTokens] = useState([]);
 	
 	
 	useEffect(() => {
@@ -56,6 +59,37 @@ const AdminScreen = () => {
 			fetchContractValues()
 		}
 	}, [walletAddress])
+	
+	useEffect(() => {
+		async function fetchAddressTokens() {
+			const response = await getAddressTokens(walletAddress);
+			if (!response) {
+				return setAddressTokens([]);
+			}
+			if (response.error) {
+				console.log('Address token error: ', response.error);
+				setAddressTokens([]);
+			} else {
+				setAddressTokens(response.tokens);
+			}
+		}
+		
+		if (walletAddress && walletAddress.length > 5) {
+			fetchAddressTokens();
+		}
+	}, [contractInfo])
+	
+	useEffect(() =>{
+		async function fetchTokenURI(tokenId) {
+			const response = await getTokenURI(tokenId)
+			console.log("tokenURI response: ", response)
+		}
+		
+		
+		if (addressTokens.length>0){
+			fetchTokenURI(addressTokens[0])
+		}
+	}, [addressTokens])
 	
 	const addWalletListener = () => {
 		if (window.ethereum) {
@@ -107,6 +141,10 @@ const AdminScreen = () => {
 		setTokenUri(event.target.value)
 	}
 	
+	const onNotRevealedInputChange = (event) => {
+		setNotRevealedValue(event.target.value)
+	}
+	
 	const handleMintFist = async (_amount) => {
 		setLoadingMintData(true);
 		const response = await mintFirst(_amount);
@@ -136,6 +174,13 @@ const AdminScreen = () => {
 	const handleSetURIPressed = async () => {
 		if (tokenUri.length > 3) {
 			const response = await setTokenURI(tokenUri, walletAddress)
+			console.log("handleSetURIPressed: ", response)
+		}
+	}
+	
+	const handleSetNotRevealedURIPressed = async () => {
+		if (notRevealedValue.length > 3) {
+			const response = await setNotRevealedURI(notRevealedValue, walletAddress)
 			console.log("handleSetURIPressed: ", response)
 		}
 	}
@@ -250,6 +295,18 @@ const AdminScreen = () => {
 								onClick={handlePauseWhitelist}>
 								{contractInfo?.pausedWhitelist ? "Resume Whitelist" : "Pause Whitelist"}
 							</button>
+							<h1>Not Revealed URI</h1>
+							<input
+								name="fname"
+								className="input-container"
+								type="text"
+								value={notRevealedValue}
+								onChange={onNotRevealedInputChange}
+							/>
+							
+							<button
+								className="admin-button"
+								onClick={handleSetNotRevealedURIPressed}>Update Not revealed URI</button>
 							<h1>Token URI</h1>
 							<input
 								name="fname"
