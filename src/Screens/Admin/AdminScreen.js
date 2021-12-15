@@ -3,13 +3,13 @@ import './Admin.css'
 import WalletHeader from "../Components/WalletHeader";
 import {
 	getContractData,
-	isContractOwner, mintFirst, mintPublic, mintWhitelist,
+	isContractOwner, mintWhitelist,
 	reserveNFT, setMerkleRoot,
 	setPausedFirst, setPausedPublic,
 	setPausedWhitelist,
 	setTokenURI,
 	withdrawContract,
-	setNotRevealedURI, getAddressTokens, getTokenURI
+	setNotRevealedURI, getAddressTokens, getTokenURI, mintNFT
 } from "../../Integrations/Contracts/ContractManager";
 import {connectWallet, getCurrentWalletConnected} from "../../Integrations/Wallet";
 import {useNavigate} from "react-router-dom";
@@ -145,26 +145,13 @@ const AdminScreen = () => {
 		setNotRevealedValue(event.target.value)
 	}
 	
-	const handleMintFist = async (_amount) => {
+	const handleMint = async (_amount) => {
 		setLoadingMintData(true);
-		const response = await mintFirst(_amount);
+		const response = await mintNFT(_amount);
 		setLoadingMintData(false)
 		
 		if (response.error) {
-			console.log("handleMintFist error: ", response.error)
-			handleError(response.error)
-		} else {
-			verifyTransaction(response.transaction)
-		}
-	}
-	
-	const handleMintPublic = async (_amount) => {
-		setLoadingMintData(true);
-		const response = await mintPublic(_amount);
-		setLoadingMintData(false)
-		
-		if (response.error) {
-			console.log("mintPublic error: ", response.error)
+			console.log("handleMint error: ", response.error)
 			handleError(response.error)
 		} else {
 			verifyTransaction(response.transaction)
@@ -224,16 +211,7 @@ const AdminScreen = () => {
 	
 	const handlePauseFirst = async () => {
 		try {
-			const response = await setPausedFirst(!contractInfo.pausedFirst, walletAddress)
-			console.log("handlePause", response)
-		} catch (e) {
-			console.log("Error handlePause: ", e)
-		}
-	}
-	
-	const handlePausePublic = async () => {
-		try {
-			const response = await setPausedPublic(!contractInfo.pausedPublic, walletAddress)
+			const response = await setPausedFirst(!contractInfo.paused, walletAddress)
 			console.log("handlePause", response)
 		} catch (e) {
 			console.log("Error handlePause: ", e)
@@ -277,19 +255,13 @@ const AdminScreen = () => {
 				{
 					isOwner && (
 						<>
-							<div className="admin-text">Function to make the fist mint</div>
+							<div className="admin-text">Function to make the Public mint</div>
 							<button
 								className="admin-button"
 								onClick={handlePauseFirst}>
-								{contractInfo?.pausedFirst ? "Resume First" : "Pause First"}
+								{contractInfo?.paused ? "Resume Minting" : "Pause Minting"}
 							</button>
-							<div className="admin-text">Function to make the Public mint</div>
-							<button
-								className="admin-button"
-								onClick={handlePausePublic}>
-								{contractInfo?.pausedPublic ? "Resume Public" : "Pause Public"}
-							</button>
-							<div className="admin-text">Function to make the Public mint</div>
+							<div className="admin-text">Function to make the whitelist mint</div>
 							<button
 								className="admin-button"
 								onClick={handlePauseWhitelist}>
@@ -323,16 +295,9 @@ const AdminScreen = () => {
 							<MintSection
 								show={contractInfo}
 								loading={loadingMintData}
-								onPress={handleMintFist}
-								paused={contractInfo?.pausedFirst}
-								label="Mint Fist"
-							/>
-							<MintSection
-								show={contractInfo}
-								loading={loadingMintData}
-								onPress={handleMintPublic}
-								paused={contractInfo?.pausedPublic}
-								label="Mint Public"
+								onPress={handleMint}
+								paused={contractInfo?.paused}
+								label="Mint"
 							/>
 							<MintSection
 								show={contractInfo}

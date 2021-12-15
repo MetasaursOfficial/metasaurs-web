@@ -24,8 +24,7 @@ export const getContractData = async (_address) => {
 		let PRICE_FIRST;
 		let PRICE_PUBLIC;
 		let merkleRoot;
-		let pausedFirst = false;
-		let pausedPublic = false;
+		let paused = false;
 		let pausedWhitelist = false;
 		let revealed = false;
 		let baseUri;
@@ -40,8 +39,7 @@ export const getContractData = async (_address) => {
 		}
 		
 		try {
-			pausedFirst = await window.contract.methods.pausedFirst().call();
-			pausedPublic = await window.contract.methods.pausedPublic().call();
+			paused = await window.contract.methods.paused().call();
 			pausedWhitelist = await window.contract.methods.pausedWhitelist().call();
 			revealed = await window.contract.methods.revealed().call();
 			baseUri = await window.contract.methods.baseUri().call();
@@ -63,8 +61,7 @@ export const getContractData = async (_address) => {
 			PRICE_FIRST,
 			PRICE_PUBLIC,
 			merkleRoot,
-			pausedFirst,
-			pausedPublic,
+			paused,
 			pausedWhitelist, revealed, baseUri, hasTokens, notRevealedURI
 		}
 	} catch (e) {
@@ -78,27 +75,7 @@ export const setPausedFirst = (_value, _address) => {
 		try {
 			window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 			
-			window.contract.methods.setPausedFirst(_value).send({from: _address}, (err, res) => {
-				if (err) {
-					resolve({error: err})
-				}
-				
-				resolve({data: res})
-			})
-			
-		} catch (e) {
-			console.log("setPausedFist error: ", e)
-			resolve({error: e})
-		}
-	})
-}
-
-export const setPausedPublic = (_value, _address) => {
-	return new Promise(async resolve => {
-		try {
-			window.contract = await new web3.eth.Contract(contractABI, contractAddress);
-			
-			window.contract.methods.setPausedPublic(_value).send({from: _address}, (err, res) => {
+			window.contract.methods.setPaused(_value).send({from: _address}, (err, res) => {
 				if (err) {
 					resolve({error: err})
 				}
@@ -303,16 +280,23 @@ export const getPriceForMultiple = (_amount, value) => {
 	return Number((totalValue)).toString(16)
 }
 
-export const mintFirst = async (_amount = 1) => {
-	
-	console.log(_amount)
+export const mintNFT = async (_amount = 1) => {
 	
 	window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 	
-	const nftValue = await window.contract.methods.PRICE_FIRST().call(); // Contract price in wei
-	console.log("nftValue: " + nftValue)
-	const valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
+	const response = await  addressHasTokens(window.ethereum.selectedAddress);
 	
+	const hasTokens = response.hasTokens;
+	
+	let nftValue;
+	
+	if (hasTokens) {
+		nftValue = await window.contract.methods.PRICE_PUBLIC().call(); // Contract price in wei
+	} else {
+		nftValue = await window.contract.methods.PRICE_FIRST().call(); // Contract price in wei
+	}
+	
+	const valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
 	
 	const suggestedGas = 154372 * _amount
 	const gasHex = await Number((suggestedGas)).toString(16)
@@ -322,7 +306,7 @@ export const mintFirst = async (_amount = 1) => {
 		from: window.ethereum.selectedAddress,
 		value: valueHex,
 		gas: gasHex,
-		data: window.contract.methods.mintFirst(_amount).encodeABI(),
+		data: window.contract.methods.mint(_amount).encodeABI(),
 	}
 	
 	// Sign the transaction via Metamask
@@ -353,42 +337,6 @@ export const reserveNFT = async (walletAddress, _amount = 1) => {
 		from: window.ethereum.selectedAddress,
 		gas: gasHex,
 		data: window.contract.methods.reserve(_amount).encodeABI(),
-	}
-	
-	// Sign the transaction via Metamask
-	try {
-		const txHash = await window.ethereum.request({
-			method: 'eth_sendTransaction',
-			params: [transactionParameters]
-		})
-		
-		return {
-			transaction: txHash
-		}
-		
-	} catch (error) {
-		console.log('Error minting transaction: ', error)
-		return {error}
-	}
-}
-
-export const mintPublic = async (_amount = 1) => {
-	
-	window.contract = await new web3.eth.Contract(contractABI, contractAddress);
-	
-	const nftValue = await window.contract.methods.PRICE_PUBLIC().call(); // Contract price in wei
-	
-	const valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
-	
-	const suggestedGas = 154372 * _amount
-	const gasHex = await Number((suggestedGas)).toString(16)
-	
-	const transactionParameters = {
-		to: contractAddress,
-		from: window.ethereum.selectedAddress,
-		value: valueHex,
-		gas: gasHex,
-		data: window.contract.methods.mintPublic(_amount).encodeABI(),
 	}
 	
 	// Sign the transaction via Metamask

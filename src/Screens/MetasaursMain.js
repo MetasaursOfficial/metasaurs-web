@@ -15,8 +15,7 @@ import {connectWallet, getCurrentWalletConnected} from "../Integrations/Wallet";
 import {
 	confirmEtherTransaction,
 	getContractData,
-	mintFirst,
-	mintPublic
+	mintNFT,
 } from "../Integrations/Contracts/ContractManager";
 import MintMain from "./Components/MintMain";
 import ErrorModal from "./Modals/ErrorModal";
@@ -202,26 +201,13 @@ const MetasaursMain = () => {
 		}
 	}
 	
-	const handleMintFist = async (_amount) => {
+	const handleMint = async (_amount) => {
 		setLoadingMintData(true);
-		const response = await mintFirst(_amount);
+		const response = await mintNFT(_amount);
 		setLoadingMintData(false)
 		
 		if (response.error) {
 			console.log("handleMintFist error: ", response.error)
-			handleError(response.error)
-		} else {
-			verifyTransaction(response.transaction)
-		}
-	}
-	
-	const handleMintPublic = async (_amount) => {
-		setLoadingMintData(true);
-		const response = await mintPublic(_amount);
-		setLoadingMintData(false)
-		
-		if (response.error) {
-			console.log("mintPublic error: ", response.error)
 			handleError(response.error)
 		} else {
 			verifyTransaction(response.transaction)
@@ -260,26 +246,12 @@ const MetasaursMain = () => {
 					<Typography variant="h5" className="white-coming">
 						{publicTime}
 					</Typography>
-					{
-						contractInfo && contractInfo.hasTokens && (
-							<MintMain
-								loading={loadingMintData}
-								onPress={handleMintPublic}
-								paused={contractInfo?.pausedPublic}
-								label="Mint Public"
-							/>
-						)
-					}
-					{
-						contractInfo && !contractInfo.hasTokens && (
-							<MintMain
-								loading={loadingMintData}
-								onPress={handleMintFist}
-								paused={contractInfo?.pausedFirst}
-								label="Mint Your First Metasaur"
-							/>
-						)
-					}
+					<MintMain
+						loading={loadingMintData}
+						onPress={handleMint}
+						paused={contractInfo?.pausedFirst}
+						label="Mint Your First Metasaur"
+					/>
 				
 				</Grid>
 				
