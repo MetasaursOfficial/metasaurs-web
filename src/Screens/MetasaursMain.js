@@ -224,7 +224,7 @@ const MetasaursMain = () => {
 				{preSale}
 			</Typography>
 			<img src={mint} className="image-margin" alt={"Steps"}/>
-			<Grid container spacing={3}>
+			<Grid container spacing={0}>
 				<Grid item lg={4} className="green-punk">
 					<img src={punkGreen} width={"100%"} height={"500px"} alt="Punk Green"/>
 				</Grid>

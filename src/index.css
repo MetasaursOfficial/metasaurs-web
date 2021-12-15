@@ -8,6 +8,7 @@ body {
   background-image: url("./assets/Mask-Group-1.png");
   background-repeat: no-repeat;
   background-size: cover;
+  margin-bottom: 10px !important;
 
 }
 
