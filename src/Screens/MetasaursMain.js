@@ -1,31 +1,36 @@
 import React, {useEffect, useRef, useState} from "react";
-import './Styles.css';
+import logo from "../assets/Groupmeta.png";
+import mint from "../assets/mintgroup.png";
+import punkGreen from "../assets/punkgreen.png";
+import punkRed from "../assets/punkred.png";
+import mobileRedPunk from '../assets/mobile-red-punk.png';
+import mobileGreenPunk from '../assets/mobile-green-punk.png';
 
+import {Box, Container, Grid, Typography,} from "@material-ui/core";
+import "./Styles.css";
+import InstallBanner from "./Components/InstallBanner";
+import WalletHeader from "./Components/WalletHeader";
+import MintProgressHeader from "./Components/MintProgressHeader";
+import {connectWallet, getCurrentWalletConnected} from "../Integrations/Wallet";
 import {
 	confirmEtherTransaction,
-	getContractData, mintFirst,
-	mintFirstStage,
-	mintWhitelist,
+	getContractData,
+	mintFirst,
+	mintPublic
 } from "../Integrations/Contracts/ContractManager";
-import {connectWallet, getCurrentWalletConnected} from "../Integrations/Wallet";
-import WalletHeader from "./Components/WalletHeader";
-import MintSection from "./Components/MintSection";
+import MintMain from "./Components/MintMain";
 import ErrorModal from "./Modals/ErrorModal";
-import MainFooter from "./Footers/MainFooter";
-import '../App.css'
-import {useNavigate} from "react-router-dom";
-import MintProgressHeader from "./Components/MintProgressHeader";
-import InstallBanner from "./Components/InstallBanner";
-import GasFeeModal from "./Modals/GasFeeModal";
-import VideoModal from "./Modals/VideoModal";
-import MetasaursMain from "./MetasaursMain";
+
+const preSale = "Pre-Sale Coming Soon";
+const whitelist = "Whitelist Pre-Sale";
+const day = "Thursday, Dec 16th @ 12:00AM EST";
+const day1 = "(Until 2:00PmEST on Friday, December 17th)";
+const publicSale = "Public Sale";
+const publicTime = " Friday, December 17th @ 3:00PM EST";
 
 const delay = 5;
 
-const HomeScreen = () => {
-	
-	const navigate = useNavigate();
-	
+const MetasaursMain = () => {
 	const [walletAddress, setWallet] = useState("");
 	const [status, setStatus] = useState("");
 	const [contractInfo, setContractInfo] = useState(null);
@@ -33,9 +38,9 @@ const HomeScreen = () => {
 	const [showError, setShowError] = useState({show: false, message: ""});
 	const [transaction, setTransaction] = useState({verifying: false, txHash: null});
 	const [loadingWallet, setLoadingWallet] = useState(false)
-	const [showGasFeeDialog, setShowGasFeeDialog] = useState(false);
-	const [showVideo, setShowVideo] = useState({show: false, url: null});
 	const timer = useRef(null);
+	const refContainer = useRef(1);
+	
 	
 	useEffect(() => {
 		async function fetchWalletData() {
@@ -56,6 +61,7 @@ const HomeScreen = () => {
 	useEffect(async () => {
 		async function fetchContractValues() {
 			const contractValues = await getContractData(walletAddress);
+			console.log("Contract values: ", contractValues);
 			setContractInfo(contractValues)
 		}
 		
@@ -146,7 +152,7 @@ const HomeScreen = () => {
 	
 	const handleSuccessfulMint = (txHash) => {
 		console.log("handleSuccessfulMint")
-		navigate(`/transaction/${txHash}`)
+		setShowError({show: true, message: "Metasaur Punk Successfully Minted"})
 	}
 	
 	const getTransactionURL = (txHash) => {
@@ -155,34 +161,6 @@ const HomeScreen = () => {
 	
 	const displayErrorTransaction = (txHash) => {
 		console.log("displayErrorTransaction: ", txHash)
-	}
-	
-	const onMintFirstStagePressed = async (amount) => {
-		setLoadingMintData(true);
-		setShowGasFeeDialog(true);
-		const response = await mintFirst(amount);
-		setLoadingMintData(false)
-		setShowGasFeeDialog(false)
-		
-		if (response.error) {
-			console.log("onMintFirstStagePressed error: ", response.error)
-			handleError(response.error)
-		} else {
-			verifyTransaction(response.transaction)
-		}
-	}
-	
-	const onMintWhiteListPressed = async (_amount) => {
-		setLoadingMintData(true);
-		const response = await mintWhitelist(_amount);
-		setLoadingMintData(false)
-		
-		if (response.error) {
-			console.log("onMintWhiteListPressed error: ", response.error)
-			handleError(response.error)
-		} else {
-			verifyTransaction(response.transaction)
-		}
 	}
 	
 	const handleNoTokensFound = () => {
@@ -224,34 +202,95 @@ const HomeScreen = () => {
 		}
 	}
 	
-	const isWalletAddress = (_walletAddress) => {
-		return _walletAddress !== "";
+	const handleMintFist = async (_amount) => {
+		setLoadingMintData(true);
+		const response = await mintFirst(_amount);
+		setLoadingMintData(false)
 		
+		if (response.error) {
+			console.log("handleMintFist error: ", response.error)
+			handleError(response.error)
+		} else {
+			verifyTransaction(response.transaction)
+		}
 	}
 	
-	const handlePlayVideoURL = (url) => {
-		console.log("handlePlayVideoURL: ", url)
-		setShowVideo({show: true, url: url});
+	const handleMintPublic = async (_amount) => {
+		setLoadingMintData(true);
+		const response = await mintPublic(_amount);
+		setLoadingMintData(false)
+		
+		if (response.error) {
+			console.log("mintPublic error: ", response.error)
+			handleError(response.error)
+		} else {
+			verifyTransaction(response.transaction)
+		}
 	}
 	
 	return (
-		<div className="container-home">
+		<Container maxWidth={false} className="main-screen-container">
 			<InstallBanner show={status === "METAMASK_NOT_INSTALLED"}/>
 			<WalletHeader connectWalletPressed={connectWalletPressed} walletAddress={walletAddress} loading={loadingWallet}/>
 			<MintProgressHeader show={transaction.verifying} link={getTransactionURL(transaction.txHash)}/>
-			<MintSection
-				show={contractInfo}
-				contractInfo={contractInfo}
-				loading={loadingMintData}
-				onPress={onMintFirstStagePressed}
-				onMintWhiteListPressed={onMintWhiteListPressed}
-				label="Mint Now"
-				isWalletAddress={isWalletAddress(walletAddress)}
-				connectWalletPressed={connectWalletPressed}
-			/>
-			<MetasaursMain/>
-			<MainFooter/>
-			<GasFeeModal showModal={showGasFeeDialog} onClose={() => setShowGasFeeDialog(false)}/>
+			<img src={logo} className="image-margin" alt={"logo"}/>
+			<Typography variant="h2" className="sale-coming">
+				{preSale}
+			</Typography>
+			<img src={mint} className="image-margin" alt={"Steps"}/>
+			<Grid container spacing={3}>
+				<Grid item lg={4} className="green-punk">
+					<img src={punkGreen} width={"100%"} height={"500px"} alt="Punk Green"/>
+				</Grid>
+				<Grid item lg={4}>
+					<Typography variant="h4" className="presale-coming">
+						{whitelist}
+					</Typography>
+					
+					<Typography variant="h5" className="white-coming">
+						{day}
+					</Typography>
+					<Typography variant="p" className="white-coming">
+						{day1}
+					</Typography>
+					
+					<Typography variant="h4" className="presale-coming">
+						{publicSale}
+					</Typography>
+					<Typography variant="h5" className="white-coming">
+						{publicTime}
+					</Typography>
+					{
+						contractInfo && contractInfo.hasTokens && (
+							<MintMain
+								loading={loadingMintData}
+								onPress={handleMintPublic}
+								paused={contractInfo?.pausedPublic}
+								label="Mint Public"
+							/>
+						)
+					}
+					{
+						contractInfo && !contractInfo.hasTokens && (
+							<MintMain
+								loading={loadingMintData}
+								onPress={handleMintFist}
+								paused={contractInfo?.pausedFirst}
+								label="Mint Your First Metasaur"
+							/>
+						)
+					}
+				
+				</Grid>
+				
+				<Grid item lg={4} className="red-punk">
+					<img src={punkRed} width={"100%"} height={"500px"} alt="punk red"/>
+				</Grid>
+			</Grid>
+			<Box className="mobile-view">
+				<img src={mobileGreenPunk} width={"50%"} alt="Green punk mobile"/>
+				<img src={mobileRedPunk} width={"50%"} alt="Red punk mobile"/>
+			</Box>
 			<ErrorModal
 				showModal={showError.show}
 				message={showError.message}
@@ -259,13 +298,8 @@ const HomeScreen = () => {
 					setShowError({show: false, message: ""})
 				}}
 			/>
-			<VideoModal
-				show={showVideo.show}
-				url={showVideo.url}
-				onClose={() => setShowVideo({show: false, url: null})}/>
-		</div>
-	)
-	
-}
+		</Container>
+	);
+};
 
-export default HomeScreen;
+export default MetasaursMain;

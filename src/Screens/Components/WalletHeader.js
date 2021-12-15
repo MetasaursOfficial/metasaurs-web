@@ -1,6 +1,6 @@
 import React from "react";
 import "./Styles.css";
-import okiIcon from "../../assets/oki-black-icon.png";
+import mainIcon from "../../assets/icon/MetasaursPunk-Logo-BK.png"
 import { Container } from "@material-ui/core";
 
 const WalletHeader = ({
@@ -34,9 +34,9 @@ const WalletHeader = ({
       <div className="wallet-container">
         <div className="oki-logo-container">
           <img
-            src={okiIcon}
+            src={mainIcon}
             alt="Oki Icon"
-            className="oki-icon"
+            className="wallet-icon"
             onClick={() => handleClick()}
           />
         </div>
