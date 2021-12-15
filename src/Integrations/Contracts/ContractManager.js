@@ -48,13 +48,22 @@ export const getContractData = async (_address) => {
 			console.log("Error getting getContractData: ", e);
 		}
 		
+		let hasTokens = false;
+		
+		try{
+			const response = await addressHasTokens(_address)
+			hasTokens = response.hasTokens
+		} catch (e) {
+		
+		}
+		
 		return {
 			PRICE_FIRST,
 			PRICE_PUBLIC,
 			merkleRoot,
 			pausedFirst,
 			pausedPublic,
-			pausedWhitelist, revealed, baseUri
+			pausedWhitelist, revealed, baseUri, hasTokens
 		}
 	} catch (e) {
 		console.log('getContractData error: ', e)
