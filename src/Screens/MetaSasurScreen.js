@@ -37,11 +37,11 @@ const MetaSasurScreen = () => {
         {preSale}
       </Typography>
       <img src={mint} className="image-margin" />
-      <Grid container spacing={3}>
-        <Grid item lg={4} className="green-punk">
+      <Grid container spacing={3} justifyContent="center">
+        <Grid item lg={4} md={4} sm={4}className="green-punk">
           <img src={punkgreen} width={"100%"} height={"500px"} />
         </Grid>
-        <Grid item lg={4}>
+        <Grid item lg={4} md={4} sm={4}>
           <Typography variant="h4" className="presale-coming">
             {whitelist}
           </Typography>
@@ -65,18 +65,19 @@ const MetaSasurScreen = () => {
             margin="normal"
             required
             select
+            // fullWidth
             className="dropdown-quantity"
             onChange={(event) => handleChange(event.target.value)}
             value={quantity}
           >
             {quantityArray.map((x) => (
-              <MenuItem>{x}</MenuItem>
+              <MenuItem value={x}>{x}</MenuItem>
             ))}
           </TextField>
-          <img src={coming} />
+          <img src={coming} width={"80%"}/>
         </Grid>
 
-        <Grid item lg={4} className="red-punk">
+        <Grid item lg={4} md={4} sm={4} className="red-punk">
           <img src={punkred} width={"100%"} height={"500px"} />
         </Grid>
       </Grid>
