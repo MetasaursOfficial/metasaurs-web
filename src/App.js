@@ -1,11 +1,10 @@
 import './App.css';
-import MetaSasurScreen from "./Screens/MetaSasurScreen";
+import MetasaursMain from "./Screens/MetasaursMain";
 
 function App() {
   return (
     <div className="App">
-      <MetaSasurScreen />
-      
+      <MetasaursMain />
     </div>
   );
 }

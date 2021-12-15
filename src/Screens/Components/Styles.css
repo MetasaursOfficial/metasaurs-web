@@ -1,15 +1,12 @@
 .wallet-container {
   display: flex;
-  /* flex-direction: row; */
-  /* padding: 0 8rem; */
   justify-content: space-between;
-  /* align-items: center; */
 }
 
 .wallet-button {
   margin-left: auto;
-  background-color: #df8bff;
-  border: 2px solid #b25cf4;
+  background-color: #59AE0F;
+  border: 2px solid #000000;
   color: white;
   box-sizing: border-box;
   border-radius: 5px;
@@ -20,13 +17,12 @@
   width: 388px;
 }
 
-.oki-icon {
-  width: 7rem;
+.wallet-icon {
+  width: 10rem;
   height: auto;
-  margin: 0.1rem;
-  margin-top: -20px;
+  margin: 0.5rem 0.1rem 0.1rem;
 }
-.oki-icon:hover {
+.wallet-icon:hover {
   cursor: pointer;
 }
 
@@ -75,23 +71,23 @@
 
 .amount-button-left {
   background-color: #f1ffe1;
-  border: 2px solid #3d465dcc;
+  border: 2px solid #000000;
   box-sizing: border-box;
   border-radius: 10px 0 0 10px;
-  color: #f9788c;
+  color: #59AE0F;
   margin-left: 0rem;
   font-size: 1.5rem;
 }
 
 .amount-button-left:hover {
-  background-color: #f9788c;
+  background-color: #59AE0F;
   color: #f1ffe1;
 }
 
 .amount-button-right {
-  color: #f9788c;
+  color: #59AE0F;
   background-color: #f1ffe1;
-  border: 2px solid #3d465dcc;
+  border: 2px solid #000000;
   box-sizing: border-box;
   border-radius: 0 10px 10px 0;
   margin-right: 1rem;
@@ -99,14 +95,14 @@
 }
 
 .amount-button-right:hover {
-  background-color: #f9788c;
+  background-color: #59AE0F;
   color: #f1ffe1;
 }
 
 .amount-button-center {
-  color: #f9788c;
+  color: #59AE0F;
   background-color: #f1ffe1;
-  border: 2px solid #3d465dcc;
+  border: 2px solid #000000;
   box-sizing: border-box;
   border-radius: 0;
   width: 5rem;
@@ -114,8 +110,8 @@
 }
 
 .button-primary {
-  background-color: #f9788c;
-  border: 2px solid #3d465d;
+  background-color: #59AE0F;
+  border: 2px solid #000000;
   color: #f1ffe1;
   box-sizing: border-box;
   border-radius: 5px;
@@ -125,8 +121,8 @@
 
 .button-primary:hover {
   background-color: #f1ffe1;
-  border: 2px solid #f9788c;
-  color: #f9788c;
+  border: 2px solid #59AE0F;
+  color: #59AE0F;
 }
 .button-primary:disabled {
   background-color: #3d465d;
@@ -156,7 +152,7 @@
   min-height: 5rem;
   align-items: center;
   justify-content: space-around;
-  background-color: #b25cf4;
+  background-color: #59AE0F;
   color: white;
   padding: 0 0.5rem;
   flex-direction: column;
@@ -167,6 +163,15 @@
   font-size: 1.2rem;
   text-align: center;
 }
+
+.mint-main-container {
+  width: 100%;
+  height: auto;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+}
+
 .plus-minus {
   width: auto;
 }
@@ -239,7 +244,7 @@
     font-size: 0.9rem;
   }
 
-  .oki-icon {
+  .wallet-icon {
     width: 5rem;
     height: auto;
     margin-top: -10px;

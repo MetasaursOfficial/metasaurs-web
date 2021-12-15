@@ -11,7 +11,7 @@ const web3 = createAlchemyWeb3(alchemyKey);
 /**
  *
  * @param _address
- * @return {Promise<null|{paused: boolean, addressTokens: *[], price: number, totalSupply: number, maxSupply: number, onlyWhitelist: boolean}>}
+ * @return {Promise<{pausedPublic: boolean, pausedFirst: boolean, baseUri: *, revealed: boolean, pausedWhitelist: boolean, merkleRoot: *, PRICE_FIRST: number, PRICE_PUBLIC: number}|null>}
  */
 export const getContractData = async (_address) => {
 	
@@ -21,47 +21,48 @@ export const getContractData = async (_address) => {
 	try {
 		window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 		
-		let maxSupply = 0;
-		let price = 0.08;
+		let PRICE_FIRST;
+		let PRICE_PUBLIC;
+		let merkleRoot;
+		let paused = false;
+		let pausedWhitelist = false;
+		let revealed = false;
+		let baseUri;
+		let notRevealedURI;
 		
 		try {
-			maxSupply = await window.contract.methods.MAX_SUPPLY().call();
+			merkleRoot = await window.contract.methods.merkleRoot().call();
+			PRICE_FIRST = await window.contract.methods.PRICE_FIRST().call();
+			PRICE_PUBLIC = await window.contract.methods.PRICE_PUBLIC().call();
 		} catch (e) {
-			console.log("Error getting tokensLimits: ", e);
+			console.log("Error getting getContractData : ", e);
 		}
 		
-		let addressTokens = []
 		try {
-			const response = await getAddressTokens(_address)
-			addressTokens = response.tokens
+			paused = await window.contract.methods.paused().call();
+			pausedWhitelist = await window.contract.methods.pausedWhitelist().call();
+			revealed = await window.contract.methods.revealed().call();
+			baseUri = await window.contract.methods.baseUri().call();
+			notRevealedURI = await window.contract.methods.notRevealedUri().call();
 		} catch (e) {
-			console.log("Error getting addressTokens: ", e)
-		}
-		let totalSupply = 0
-		try {
-			totalSupply = await window.contract.methods.totalSupply().call()
-			console.log("Total: ", totalSupply)
-			
-		} catch (e) {
-			console.log("Error getting first stage tokens: ", e)
+			console.log("Error getting getContractData: ", e);
 		}
 		
-		let paused = true;
-		let onlyWhitelist = false;
+		let hasTokens = false;
+		
 		try {
-			paused = await window.contract.methods.mintPaused().call();
-			onlyWhitelist = await window.contract.methods.onlyWhitelist().call();
+			const response = await addressHasTokens(_address)
+			hasTokens = response.hasTokens
 		} catch (e) {
-			console.log("Error getting paused: ", e)
+		
 		}
 		
 		return {
-			price,
-			addressTokens,
+			PRICE_FIRST,
+			PRICE_PUBLIC,
+			merkleRoot,
 			paused,
-			totalSupply,
-			maxSupply,
-			onlyWhitelist
+			pausedWhitelist, revealed, baseUri, hasTokens, notRevealedURI
 		}
 	} catch (e) {
 		console.log('getContractData error: ', e)
@@ -69,7 +70,7 @@ export const getContractData = async (_address) => {
 	
 }
 
-export const setPauseSales = (_value, _address) => {
+export const setPausedFirst = (_value, _address) => {
 	return new Promise(async resolve => {
 		try {
 			window.contract = await new web3.eth.Contract(contractABI, contractAddress);
@@ -83,18 +84,18 @@ export const setPauseSales = (_value, _address) => {
 			})
 			
 		} catch (e) {
-			console.log("setPauseFirst error: ", e)
+			console.log("setPausedFist error: ", e)
 			resolve({error: e})
 		}
 	})
 }
 
-export const setPauseWhitelist = (_value, _address) => {
+export const setPausedWhitelist = (_value, _address) => {
 	return new Promise(async resolve => {
 		try {
 			window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 			
-			window.contract.methods.setOnlyWhitelist(_value).send({from: _address}, (err, res) => {
+			window.contract.methods.setPausedWhitelist(_value).send({from: _address}, (err, res) => {
 				if (err) {
 					resolve({error: err})
 				}
@@ -103,11 +104,54 @@ export const setPauseWhitelist = (_value, _address) => {
 			})
 			
 		} catch (e) {
-			console.log("setPauseFirst error: ", e)
+			console.log("setPausedFist error: ", e)
 			resolve({error: e})
 		}
 	})
 }
+
+export const setNotRevealedURI = (_value, _address) => {
+	console.log("setNotRevealedURI: ", _value, _address)
+	return new Promise(async resolve => {
+		try {
+			window.contract = await new web3.eth.Contract(contractABI, contractAddress);
+			
+			window.contract.methods.setNotRevealedURI(_value).send({from: _address}, (err, res) => {
+				if (err) {
+					resolve({error: err})
+				}
+				
+				resolve({data: res})
+			})
+			
+		} catch (e) {
+			console.log("setPausedFist error: ", e)
+			resolve({error: e})
+		}
+	})
+}
+
+
+export const setMerkleRoot = (_value, _address) => {
+	return new Promise(async resolve => {
+		try {
+			window.contract = await new web3.eth.Contract(contractABI, contractAddress);
+			
+			window.contract.methods.setMerkleRoot(_value).send({from: _address}, (err, res) => {
+				if (err) {
+					resolve({error: err})
+				}
+				
+				resolve({data: res})
+			})
+			
+		} catch (e) {
+			console.log("setPausedFist error: ", e)
+			resolve({error: e})
+		}
+	})
+}
+
 
 /**
  *
@@ -156,7 +200,7 @@ export const addressHasTokens = async (_address) => {
 		window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 		const tokenCount = await window.contract.methods.balanceOf(_address).call();
 		response.hasTokens = tokenCount > 0;
-		return  response
+		return response
 		
 	} catch (e) {
 		console.log("addressHasTokens error: ", e)
@@ -177,7 +221,7 @@ export const getTokenURI = async (_tokenId) => {
 		let tokenURI;
 		try {
 			tokenURI = await window.contract.methods.tokenURI(_tokenId).call();
-			console.log("tokenURI", tokenURI)
+			console.log("tokenURI: ", tokenURI)
 			return {
 				error: null,
 				tokenURI: tokenURI,
@@ -193,20 +237,21 @@ export const getTokenURI = async (_tokenId) => {
 	}
 }
 
-export const mintWhitelist = async (_amount) => {
+export const mintWhitelist = async (_amount, proof) => {
+	console.log("mintWhitelist : ", _amount, proof)
+	const proofArray = JSON.parse(proof)
 	
 	window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 	
-	const nftValue = await window.contract.methods.PRICE().call(); // Contract price in wei
+	const nftValue = await window.contract.methods.PRICE_PUBLIC().call(); // Contract price in wei
 	
-	const valueHex = await Number((nftValue * _amount)).toString(16)
-	
+	const valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
 	
 	const transactionParameters = {
 		to: contractAddress,
 		from: window.ethereum.selectedAddress,
 		value: valueHex,
-		data: window.contract.methods.mintWhitelist(_amount).encodeABI(),
+		data: window.contract.methods.whitelistMint(proofArray, _amount).encodeABI(),
 	}
 	
 	// Sign the transaction via Metamask
@@ -226,13 +271,32 @@ export const mintWhitelist = async (_amount) => {
 	}
 }
 
-export const mintFirstStage = async (_amount = 1) => {
+export const getPriceForMultiple = (_amount, value) => {
+	const multiplier = (_amount - 1);
+	const baseMultiple = 60000000000000000;
+	const partial = multiplier * baseMultiple;
+	const totalValue = value + partial;
+	
+	return Number((totalValue)).toString(16)
+}
+
+export const mintNFT = async (_amount = 1) => {
 	
 	window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 	
-	const nftValue = await window.contract.methods.PRICE().call(); // Contract price in wei
+	const response = await  addressHasTokens(window.ethereum.selectedAddress);
 	
-	const valueHex = await Number((nftValue * _amount)).toString(16)
+	const hasTokens = response.hasTokens;
+	
+	let nftValue;
+	
+	if (hasTokens) {
+		nftValue = await window.contract.methods.PRICE_PUBLIC().call(); // Contract price in wei
+	} else {
+		nftValue = await window.contract.methods.PRICE_FIRST().call(); // Contract price in wei
+	}
+	
+	const valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
 	
 	const suggestedGas = 154372 * _amount
 	const gasHex = await Number((suggestedGas)).toString(16)
@@ -242,7 +306,7 @@ export const mintFirstStage = async (_amount = 1) => {
 		from: window.ethereum.selectedAddress,
 		value: valueHex,
 		gas: gasHex,
-		data: window.contract.methods.mintOki(_amount).encodeABI(),
+		data: window.contract.methods.mint(_amount).encodeABI(),
 	}
 	
 	// Sign the transaction via Metamask
@@ -290,20 +354,6 @@ export const reserveNFT = async (walletAddress, _amount = 1) => {
 		console.log('Error minting transaction: ', error)
 		return {error}
 	}
-}
-
-export const setWhitelistedAddress = async (addressArray, _amount, _walletAddress) => {
-	return new Promise(async resolve => {
-		window.contract = await new web3.eth.Contract(contractABI, contractAddress);
-		
-		window.contract.methods.setWhitelist(addressArray, _amount).send({from: _walletAddress}, (err, res) => {
-			if (err) {
-				resolve({error: err})
-			}
-			
-			resolve({data: res})
-		})
-	})
 }
 
 
@@ -462,6 +512,7 @@ export const setTokenURI = async (newTokenURI, _address) => {
 	}
 }
 
+
 export const withdrawContract = (_address) => {
 	
 	return new Promise(async resolve => {
@@ -482,7 +533,7 @@ export const withdrawContract = (_address) => {
 			})
 			
 			resolve({
-				transaction: `https://ropsten.etherscan.io/tx/${txHash}`
+				transaction: `https://rinkeby.etherscan.io/tx/${txHash}`
 			})
 			
 		} catch (error) {
@@ -490,7 +541,6 @@ export const withdrawContract = (_address) => {
 		}
 		
 	})
-	
 	
 }
 

@@ -1,36 +1,3 @@
 .App {
   text-align: center;
-   /* background-color: #87AEFF */
 }
-
-/* .App-header {
-  background-image: url('../src/assets/maskgroup1.png'),
-    linear-gradient(rgba(135, 174, 255, 0.9), rgba(240, 207, 242, 0.9)),
-    url('../src/assets/clouds.png');
-  background-repeat: no-repeat;
-  background-size: 27rem 10rem, cover, cover;
-  background-position: 95% 95%, center, center;
-}
-
-.second-header {
-  background-image: url('../src/assets/sun moth 1.png'),
-    url('../src/assets/sun moth 2.png'), url('../src/assets/sun moth 3.png'),
-    linear-gradient(#f0cff2, #f1ffe1);
-  background-repeat: no-repeat;
-  background-position: 20% 85%, 80% 60%, 20% 45%;
-}
-
-.third-header {
-  background-image: url('../src/assets/Oki Desk 1.png'),
-    linear-gradient(#f1ffe1, #87aeff);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position-y: -70%;
-}
-
-.fourth-header {
-  background-image: url('../src/assets/oki_house.png'),
-    linear-gradient(#87aeff, #f2fee2);
-  background-repeat: no-repeat;
-  background-size: cover;
-} */

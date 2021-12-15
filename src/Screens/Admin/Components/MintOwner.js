@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import './Styles.css';
 
 const MintOwner = ({
-	                       loading = true,
-	                       onPress = () => {
-	                       },
-	                       label = '',
-                       }) => {
+	                   loading = true,
+	                   onPress = () => {
+	                   },
+	                   label = '',
+                   }) => {
 	const [amount, setAmount] = useState(1);
 	
 	const handleAdd = () => {
