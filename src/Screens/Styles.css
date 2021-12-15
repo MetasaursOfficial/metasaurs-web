@@ -76,6 +76,27 @@ button {
   cursor: pointer;
 }
 
+.button-mint {
+  padding: 9px 16px;
+  max-height: 65px;
+  border: 3px solid #FFEE00;
+  color: white;
+  background-color: transparent;
+  border-radius: 8px;
+  align-items: center;
+  font-size: 16px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  min-width: 15rem;
+  width: 60%;
+}
+
+.button-mint:hover {
+  border: 3px solid white;
+  color: #FFEE00;
+}
+
 .uploadFile {
   border: 4px dashed rgba(4, 4, 5, 0.1);
   border-radius: 16px;
@@ -119,15 +140,20 @@ button {
 
 }
 .dropdown-quantity{
-  width: 292px !important;
+  width: 60% !important;
   border: 2px solid #59AE0F !important;
   background-color: transparent !important;
   margin-top: 50px !important;
+  height: 3rem !important;
   color: white !important;
 }
 
 .dropdown-quantity .MuiFormLabel-root,.dropdown-quantity>div .MuiSelect-icon{
   color: #ffffff !important;
+}
+
+.main-screen-container {
+  padding-top: 1rem !important;
 }
 
 @media only screen and (max-width: 600px) {

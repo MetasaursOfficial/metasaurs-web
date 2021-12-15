@@ -12,7 +12,6 @@ ReactDOM.render(
 			<Routes>
 				<Route path="/" element={<App />} />
 				<Route path="/admin" element={<AdminScreen />} />
-				<Route path="/transaction/:txHash"  element={<TransactionScreen />} />
 				<Route
 					path="*"
 					element={

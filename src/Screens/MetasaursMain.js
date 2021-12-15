@@ -13,7 +13,7 @@ import {
   Container,
   TextField,
   MenuItem,
-  Box,
+  Box, Select, FormControl, InputLabel,
 } from "@material-ui/core";
 import "./Styles.css";
 import InstallBanner from "./Components/InstallBanner";
@@ -21,7 +21,10 @@ import WalletHeader from "./Components/WalletHeader";
 import MintProgressHeader from "./Components/MintProgressHeader";
 import {useNavigate} from "react-router-dom";
 import {connectWallet} from "../Integrations/Wallet";
-import {confirmEtherTransaction, mintFirst, mintWhitelist} from "../Integrations/Contracts/ContractManager";
+import {confirmEtherTransaction, mintFirst, mintPublic, mintWhitelist} from "../Integrations/Contracts/ContractManager";
+import MintMain from "./Components/MintMain";
+import {getWalletProof} from "../Integrations/API";
+import ErrorModal from "./Modals/ErrorModal";
 
 const preSale = "Pre-Sale Coming Soon";
 const whitelist = "Whitelist Pre-Sale";
@@ -29,10 +32,9 @@ const day = "Thursday, Dec 16th @ 12:00AM EST";
 const day1 = "(Until 2:00PmEST on Friday, December 17th)";
 const publicSale = "Public Sale";
 const publicTime = " Friday, December 17th @ 3:00PM EST";
-const quantityArray = ["1", "2", "3", "4", "5", "6"];
 
 const MetasaursMain = () => {
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
   const [walletAddress, setWallet] = useState("");
   const [status, setStatus] = useState("");
@@ -44,6 +46,7 @@ const MetasaursMain = () => {
   const [showGasFeeDialog, setShowGasFeeDialog] = useState(false);
   const [showVideo, setShowVideo] = useState({show: false, url: null});
   const timer = useRef(null);
+  const refContainer = useRef(1);
   
   const addWalletListener = () => {
     if (window.ethereum) {
@@ -112,7 +115,7 @@ const MetasaursMain = () => {
   
   const handleSuccessfulMint = (txHash) => {
     console.log("handleSuccessfulMint")
-    navigate(`/transaction/${txHash}`)
+    setShowError({show: true, message: "Metasaur Punk Successfully Minted"})
   }
   
   const getTransactionURL = (txHash) => {
@@ -121,34 +124,6 @@ const MetasaursMain = () => {
   
   const displayErrorTransaction = (txHash) => {
     console.log("displayErrorTransaction: ", txHash)
-  }
-  
-  const onMintFirstStagePressed = async (amount) => {
-    setLoadingMintData(true);
-    setShowGasFeeDialog(true);
-    const response = await mintFirst(amount);
-    setLoadingMintData(false)
-    setShowGasFeeDialog(false)
-    
-    if (response.error) {
-      console.log("onMintFirstStagePressed error: ", response.error)
-      handleError(response.error)
-    } else {
-      verifyTransaction(response.transaction)
-    }
-  }
-  
-  const onMintWhiteListPressed = async (_amount) => {
-    setLoadingMintData(true);
-    const response = await mintWhitelist(_amount);
-    setLoadingMintData(false)
-    
-    if (response.error) {
-      console.log("onMintWhiteListPressed error: ", response.error)
-      handleError(response.error)
-    } else {
-      verifyTransaction(response.transaction)
-    }
   }
   
   const handleNoTokensFound = () => {
@@ -190,21 +165,34 @@ const MetasaursMain = () => {
     }
   }
   
-  const isWalletAddress = (_walletAddress) => {
-    return _walletAddress !== "";
+  const handleMintFist = async (_amount) => {
+    setLoadingMintData(true);
+    const response = await mintFirst(_amount);
+    setLoadingMintData(false)
+    
+    if (response.error) {
+      console.log("handleMintFist error: ", response.error)
+      handleError(response.error)
+    } else {
+      verifyTransaction(response.transaction)
+    }
   }
   
-  const renderSelectField = () => (
-    <Typography variant="h5" className="white-coming">
-      {quantity}
-    </Typography>
-  );
+  const handleMintPublic = async (_amount) => {
+    setLoadingMintData(true);
+    const response = await mintPublic(_amount);
+    setLoadingMintData(false)
+    
+    if (response.error) {
+      console.log("mintPublic error: ", response.error)
+      handleError(response.error)
+    } else {
+      verifyTransaction(response.transaction)
+    }
+  }
   
-  const handleChange = (value) => {
-    setQuantity(value);
-  };
   return (
-    <Container maxWidth={false}>
+    <Container maxWidth={false} className="main-screen-container">
       <InstallBanner show={status === "METAMASK_NOT_INSTALLED"}/>
       <WalletHeader connectWalletPressed={connectWalletPressed} walletAddress={walletAddress} loading={loadingWallet}/>
       <MintProgressHeader show={transaction.verifying} link={getTransactionURL(transaction.txHash)}/>
@@ -235,21 +223,18 @@ const MetasaursMain = () => {
           <Typography variant="h5" className="white-coming">
             {publicTime}
           </Typography>
-          <TextField
-            label="Quantity"
-            variant="outlined"
-            margin="normal"
-            required
-            select
-            className="dropdown-quantity"
-            onChange={(event) => handleChange(event.target.value)}
-            value={quantity}
-          >
-            {quantityArray.map((x) => (
-              <MenuItem>{x}</MenuItem>
-            ))}
-          </TextField>
-          <img src={coming} alt="coming"/>
+          <MintMain
+            loading={loadingMintData}
+            onPress={handleMintFist}
+            paused={contractInfo?.pausedFirst}
+            label="Mint Fist"
+          />
+          <MintMain
+            loading={loadingMintData}
+            onPress={handleMintPublic}
+            paused={contractInfo?.pausedPublic}
+            label="Mint Public"
+          />
         </Grid>
 
         <Grid item lg={4} className="red-punk">
@@ -260,6 +245,13 @@ const MetasaursMain = () => {
         <img src={mobileGreenPunk} width={"50%"} alt="Green punk mobile"/>
         <img src={mobileRedPunk} width={"50%"} alt="Red punk mobile"/>
       </Box>
+      <ErrorModal
+        showModal={showError.show}
+        message={showError.message}
+        onClose={() => {
+          setShowError({show: false, message: ""})
+        }}
+      />
     </Container>
   );
 };

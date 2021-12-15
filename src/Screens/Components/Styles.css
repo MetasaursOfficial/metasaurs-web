@@ -163,6 +163,15 @@
   font-size: 1.2rem;
   text-align: center;
 }
+
+.mint-main-container {
+  width: 100%;
+  height: auto;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+}
+
 .plus-minus {
   width: auto;
 }
