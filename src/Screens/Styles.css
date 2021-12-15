@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');
 
 .My-Okis {
-  background: linear-gradient(#f1ffe1, #f1cff3);
   min-height: 100vh;
   padding-top: 2rem;
 }
@@ -22,7 +21,6 @@
 }
 
 .Oki-Resume {
-  background: linear-gradient(#f1ffe1, #f1cff3);
   min-height: 100vh;
   padding: 5rem;
 }
@@ -33,7 +31,6 @@ body {
   color: #272323;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f1cff3;
 }
 
 .container-home {
@@ -68,8 +65,8 @@ body {
 button {
   padding: 9px 16px;
   max-height: 65px;
-  border-color: #87aeff;
-  color: #b171f2;
+  border-color: #000000;
+  color: #59AE0F;
   background-color: white;
   border-radius: 8px;
   align-items: center;
@@ -79,11 +76,84 @@ button {
   cursor: pointer;
 }
 
+.button-mint {
+  padding: 9px 16px;
+  max-height: 65px;
+  border: 3px solid #FFEE00;
+  color: white;
+  background-color: transparent;
+  border-radius: 8px;
+  align-items: center;
+  font-size: 16px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  min-width: 15rem;
+  width: 60%;
+}
+
+.button-mint:hover {
+  border: 3px solid white;
+  color: #FFEE00;
+}
+
 .uploadFile {
   border: 4px dashed rgba(4, 4, 5, 0.1);
   border-radius: 16px;
   text-align: center;
   padding: 32px 60px;
+}
+/* sdf */
+
+.sale-coming {
+  text-align: center;
+  color: #FFEE00;
+  margin-top: 20px !important;
+  font-weight: bolder !important;
+  /* font-family: Obvia !important; */
+}
+.image-margin {
+  margin-top: 40px !important;
+}
+.presale-coming {
+  text-align: center;
+  color: #FFEE00;
+  margin-top: 20px !important;
+  font-weight: bolder !important;
+}
+.white-coming {
+  text-align: center;
+  color: white;
+  margin-top: 7px !important;
+  font-weight: bolder !important;
+}
+.red-punk{
+  margin-top: 50px;
+}
+.green-punk{
+  margin-top: 50px;
+
+}
+.mobile-view{
+  display: none;
+  margin-bottom: 0px !important;
+
+}
+.dropdown-quantity{
+  width: 60% !important;
+  border: 2px solid #59AE0F !important;
+  background-color: transparent !important;
+  margin-top: 50px !important;
+  height: 3rem !important;
+  color: white !important;
+}
+
+.dropdown-quantity .MuiFormLabel-root,.dropdown-quantity>div .MuiSelect-icon{
+  color: #ffffff !important;
+}
+
+.main-screen-container {
+  padding-top: 1rem !important;
 }
 
 @media only screen and (max-width: 600px) {
@@ -92,6 +162,22 @@ button {
     width: auto;
     min-height: 100vh;
     text-align: center;
+  }
+  .red-punk{
+    display: none;
+  }
+  .green-punk{
+    display: none;
+  }
+  .image-margin {
+    width: 100% !important;
+  }
+  .sale-coming  {
+    font-size: 40px !important;
+  }
+  .mobile-view{
+    display: flex;
+    margin-bottom: 10px;
   }
   
 }

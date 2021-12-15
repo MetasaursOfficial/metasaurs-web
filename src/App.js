@@ -1,10 +1,10 @@
 import './App.css';
-import HomeScreen from "./Screens/HomeScreen";
+import MetasaursMain from "./Screens/MetasaursMain";
 
 function App() {
   return (
-    <div className="App App-header">
-      <HomeScreen />
+    <div className="App">
+      <MetasaursMain />
     </div>
   );
 }
