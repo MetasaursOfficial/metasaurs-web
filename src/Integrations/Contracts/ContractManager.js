@@ -277,22 +277,12 @@ export const mintNFT = async (_amount = 1) => {
 	
 	window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 	
-	const response = await addressHasTokens(window.ethereum.selectedAddress);
+	let nftValue = await window.contract.methods.PRICE_PUBLIC().call(); // Contract price in wei
 	
-	const hasTokens = response.hasTokens;
-	
-	let nftValue;
-	
-	if (hasTokens) {
-		nftValue = await window.contract.methods.PRICE_PUBLIC().call(); // Contract price in wei
-	} else {
-		nftValue = await window.contract.methods.PRICE_FIRST().call(); // Contract price in wei
-	}
-	
-	const valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
+	const valueHex = Number((nftValue * _amount)).toString(16)
 	
 	const suggestedGas = 154372 * _amount
-	const gasHex = await Number((suggestedGas)).toString(16)
+	const gasHex = Number((suggestedGas)).toString(16)
 	
 	const transactionParameters = {
 		to: contractAddress,
