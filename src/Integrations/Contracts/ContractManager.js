@@ -238,13 +238,30 @@ export const mintWhitelist = async (_amount, _signature) => {
 	
 	const nftValue = await window.contract.methods.PRICE_FIRST().call(); // Contract price in wei
 	
-	const valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
+	let hasTokens = false;
+	
+	try {
+		const response = await addressHasTokens(window.ethereum.selectedAddress)
+		hasTokens = response.hasTokens
+	} catch (e) {
+	
+	}
+	
+	let valueHex;
+	
+	if (hasTokens) {
+		const nftValue = await window.contract.methods.PRICE_PUBLIC().call(); // Contract price in wei
+		valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
+	} else {
+		const nftValue = await window.contract.methods.PRICE_FIRST().call(); // Contract price in wei
+		valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
+	}
 	
 	const transactionParameters = {
 		to: contractAddress,
 		from: window.ethereum.selectedAddress,
 		value: valueHex,
-		data: window.contract.methods.whitelistMint(_amount, _signature).encodeABI(),
+		data: window.contract.methods.whitelistMint(_amount, _amount, _signature).encodeABI(),
 	}
 	
 	// Sign the transaction via Metamask

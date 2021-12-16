@@ -281,7 +281,7 @@ const MetasaursMain = () => {
 								loading={loadingMintData}
 								onPress={handleMint}
 								paused={contractInfo?.paused}
-								label="Mint Your First Metasaur"
+								label="Mint Your Metasaur"
 							/>
 						)
 					}
