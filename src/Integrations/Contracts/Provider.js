@@ -8,7 +8,7 @@ if (environment === "DEV") {
 	const response = require('../../Contracts/TestContract/Address')
 	contractAddress = response.contractAddress;
 } else {
-	contractABIMetadataABI = require("../../Contracts/ProdContract/TestContract.json");
+	contractABIMetadataABI = require("../../Contracts/ProdContract/MetasaursPunks.json");
 	const response = require('../../Contracts/ProdContract/Address')
 	contractAddress = response.contractAddress;
 }
