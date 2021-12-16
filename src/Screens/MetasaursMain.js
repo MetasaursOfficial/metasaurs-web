@@ -16,9 +16,11 @@ import {
 	confirmEtherTransaction,
 	getContractData,
 	mintNFT,
+	mintWhitelist,
 } from "../Integrations/Contracts/ContractManager";
 import MintMain from "./Components/MintMain";
 import ErrorModal from "./Modals/ErrorModal";
+import {getWalletSignature} from "../Integrations/API";
 
 const preSale = "Pre-Sale Coming Soon";
 const whitelist = "Whitelist Pre-Sale";
@@ -207,11 +209,37 @@ const MetasaursMain = () => {
 		setLoadingMintData(false)
 		
 		if (response.error) {
-			console.log("handleMintFist error: ", response.error)
+			console.log("handleMint error: ", response.error)
 			handleError(response.error)
 		} else {
 			verifyTransaction(response.transaction)
 		}
+	}
+	
+	
+	const handleMintWhitelist = async (_amount) => {
+		setLoadingMintData(true);
+		try {
+			const signatureResponse = await getWalletSignature(walletAddress);
+			if (!signatureResponse.signature) {
+				setLoadingMintData(false)
+				handleError("Not in Whitelist");
+			} else {
+				const response = await mintWhitelist(_amount, signatureResponse.signature);
+				setLoadingMintData(false)
+				
+				if (response.error) {
+					console.log("mintWhitelist error: ", response.error)
+					handleError(response.error)
+				} else {
+					verifyTransaction(response.transaction)
+				}
+			}
+		} catch (e) {
+			console.log("Error mint whitelist: ", e)
+			setLoadingMintData(false)
+		}
+		
 	}
 	
 	return (
@@ -246,12 +274,30 @@ const MetasaursMain = () => {
 					<Typography variant="h5" className="white-coming">
 						{publicTime}
 					</Typography>
-					<MintMain
-						loading={loadingMintData}
-						onPress={handleMint}
-						paused={contractInfo?.pausedFirst}
-						label="Mint Your First Metasaur"
-					/>
+					
+					{
+						contractInfo && !contractInfo.paused && (
+							<MintMain
+								loading={loadingMintData}
+								onPress={handleMint}
+								paused={contractInfo?.paused}
+								label="Mint Your First Metasaur"
+							/>
+						)
+					}
+					
+					
+					{
+						contractInfo && !contractInfo.pausedWhitelist && (
+							<MintMain
+								loading={loadingMintData}
+								onPress={handleMintWhitelist}
+								paused={contractInfo?.pausedWhitelist}
+								label="Whitelist Mint"
+							/>
+						)
+					}
+				
 				
 				</Grid>
 				

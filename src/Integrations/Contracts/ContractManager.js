@@ -11,7 +11,7 @@ const web3 = createAlchemyWeb3(alchemyKey);
 /**
  *
  * @param _address
- * @return {Promise<{pausedPublic: boolean, pausedFirst: boolean, baseUri: *, revealed: boolean, pausedWhitelist: boolean, merkleRoot: *, PRICE_FIRST: number, PRICE_PUBLIC: number}|null>}
+ * @return {Promise<null|{notRevealedURI: *, paused: boolean, hasTokens: boolean, baseUri: *, revealed: boolean, pausedWhitelist: boolean, PRICE_FIRST: *, PRICE_PUBLIC: *}>}
  */
 export const getContractData = async (_address) => {
 	

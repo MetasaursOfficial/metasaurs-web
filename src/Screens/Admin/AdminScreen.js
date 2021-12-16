@@ -249,7 +249,6 @@ const AdminScreen = () => {
 			setLoadingMintData(false)
 		}
 		
-		
 	}
 	
 	const onAddressSubmit = async (_addressArray, _amount) => {
@@ -314,8 +313,7 @@ const AdminScreen = () => {
 								className="admin-button"
 								onClick={handleSetURIPressed}>Update Token URI
 							</button>
-							<RootForm onSubmit={handleSubmitRoot}/>
-							<WhitelistForm onSubmit={onAddressSubmit}/>
+							{/*<WhitelistForm onSubmit={onAddressSubmit}/>*/}
 							<MintSection
 								show={contractInfo}
 								loading={loadingMintData}
