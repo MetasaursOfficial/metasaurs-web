@@ -236,8 +236,6 @@ export const mintWhitelist = async (_amount, _signature) => {
 	
 	window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 	
-	const nftValue = await window.contract.methods.PRICE_FIRST().call(); // Contract price in wei
-	
 	let hasTokens = false;
 	
 	try {
@@ -250,7 +248,7 @@ export const mintWhitelist = async (_amount, _signature) => {
 	let valueHex;
 	
 	if (hasTokens) {
-		const nftValue = await window.contract.methods.PRICE_PUBLIC().call(); // Contract price in wei
+		const nftValue = await window.contract.methods.PRICE_SECOND().call(); // Contract price in wei
 		valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
 	} else {
 		const nftValue = await window.contract.methods.PRICE_FIRST().call(); // Contract price in wei
