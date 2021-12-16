@@ -23,7 +23,6 @@ export const getContractData = async (_address) => {
 		
 		let PRICE_FIRST;
 		let PRICE_PUBLIC;
-		let merkleRoot;
 		let paused = false;
 		let pausedWhitelist = false;
 		let revealed = false;
@@ -31,7 +30,6 @@ export const getContractData = async (_address) => {
 		let notRevealedURI;
 		
 		try {
-			merkleRoot = await window.contract.methods.merkleRoot().call();
 			PRICE_FIRST = await window.contract.methods.PRICE_FIRST().call();
 			PRICE_PUBLIC = await window.contract.methods.PRICE_PUBLIC().call();
 		} catch (e) {
@@ -60,7 +58,6 @@ export const getContractData = async (_address) => {
 		return {
 			PRICE_FIRST,
 			PRICE_PUBLIC,
-			merkleRoot,
 			paused,
 			pausedWhitelist, revealed, baseUri, hasTokens, notRevealedURI
 		}
@@ -110,6 +107,26 @@ export const setPausedWhitelist = (_value, _address) => {
 	})
 }
 
+export const setRevealed = (_value, _address) => {
+	return new Promise(async resolve => {
+		try {
+			window.contract = await new web3.eth.Contract(contractABI, contractAddress);
+			
+			window.contract.methods.setRevealed(_value).send({from: _address}, (err, res) => {
+				if (err) {
+					resolve({error: err})
+				}
+				
+				resolve({data: res})
+			})
+			
+		} catch (e) {
+			console.log("setPausedFist error: ", e)
+			resolve({error: e})
+		}
+	})
+}
+
 export const setNotRevealedURI = (_value, _address) => {
 	console.log("setNotRevealedURI: ", _value, _address)
 	return new Promise(async resolve => {
@@ -130,28 +147,6 @@ export const setNotRevealedURI = (_value, _address) => {
 		}
 	})
 }
-
-
-export const setMerkleRoot = (_value, _address) => {
-	return new Promise(async resolve => {
-		try {
-			window.contract = await new web3.eth.Contract(contractABI, contractAddress);
-			
-			window.contract.methods.setMerkleRoot(_value).send({from: _address}, (err, res) => {
-				if (err) {
-					resolve({error: err})
-				}
-				
-				resolve({data: res})
-			})
-			
-		} catch (e) {
-			console.log("setPausedFist error: ", e)
-			resolve({error: e})
-		}
-	})
-}
-
 
 /**
  *
@@ -237,13 +232,11 @@ export const getTokenURI = async (_tokenId) => {
 	}
 }
 
-export const mintWhitelist = async (_amount, proof) => {
-	console.log("mintWhitelist : ", _amount, proof)
-	const proofArray = JSON.parse(proof)
+export const mintWhitelist = async (_amount, _signature) => {
 	
 	window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 	
-	const nftValue = await window.contract.methods.PRICE_PUBLIC().call(); // Contract price in wei
+	const nftValue = await window.contract.methods.PRICE_FIRST().call(); // Contract price in wei
 	
 	const valueHex = getPriceForMultiple(Number(_amount), Number(nftValue))
 	
@@ -251,7 +244,7 @@ export const mintWhitelist = async (_amount, proof) => {
 		to: contractAddress,
 		from: window.ethereum.selectedAddress,
 		value: valueHex,
-		data: window.contract.methods.whitelistMint(proofArray, _amount).encodeABI(),
+		data: window.contract.methods.whitelistMint(_amount, _signature).encodeABI(),
 	}
 	
 	// Sign the transaction via Metamask
@@ -284,7 +277,7 @@ export const mintNFT = async (_amount = 1) => {
 	
 	window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 	
-	const response = await  addressHasTokens(window.ethereum.selectedAddress);
+	const response = await addressHasTokens(window.ethereum.selectedAddress);
 	
 	const hasTokens = response.hasTokens;
 	
@@ -511,7 +504,6 @@ export const setTokenURI = async (newTokenURI, _address) => {
 		return {error: e}
 	}
 }
-
 
 export const withdrawContract = (_address) => {
 	

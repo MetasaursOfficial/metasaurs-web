@@ -2,21 +2,25 @@ import React, {useEffect, useState} from 'react';
 import './Admin.css'
 import WalletHeader from "../Components/WalletHeader";
 import {
+	getAddressTokens,
 	getContractData,
-	isContractOwner, mintWhitelist,
-	reserveNFT, setMerkleRoot,
-	setPausedFirst, setPausedPublic,
-	setPausedWhitelist,
+	getTokenURI,
+	isContractOwner,
+	mintNFT,
+	mintWhitelist,
+	reserveNFT,
+	setNotRevealedURI,
+	setPausedFirst,
+	setPausedWhitelist, setRevealed,
 	setTokenURI,
 	withdrawContract,
-	setNotRevealedURI, getAddressTokens, getTokenURI, mintNFT
 } from "../../Integrations/Contracts/ContractManager";
 import {connectWallet, getCurrentWalletConnected} from "../../Integrations/Wallet";
 import {useNavigate} from "react-router-dom";
-import MintOwner from "./Components/MintOwner";
 import RootForm from "./Components/RootForm";
-import {getWalletProof} from "../../Integrations/API";
+import {getWalletSignature} from "../../Integrations/API";
 import MintSection from "../Components/MintSection";
+import WhitelistForm from "./Components/WhitelistForm";
 
 const AdminScreen = () => {
 	
@@ -79,14 +83,14 @@ const AdminScreen = () => {
 		}
 	}, [contractInfo])
 	
-	useEffect(() =>{
+	useEffect(() => {
 		async function fetchTokenURI(tokenId) {
 			const response = await getTokenURI(tokenId)
 			console.log("tokenURI response: ", response)
 		}
 		
 		
-		if (addressTokens.length>0){
+		if (addressTokens.length > 0) {
 			fetchTokenURI(addressTokens[0])
 		}
 	}, [addressTokens])
@@ -192,6 +196,7 @@ const AdminScreen = () => {
 	}
 	
 	const handleError = (error) => {
+		console.log("handleError: ", error)
 		setStatus(error.toString())
 	}
 	
@@ -200,13 +205,7 @@ const AdminScreen = () => {
 	}
 	
 	const handleSubmitRoot = async (value) => {
-		console.log("handleSubmitRoot: ", value);
-		try {
-			const response = await setMerkleRoot(value, walletAddress)
-			console.log("handlePause", response)
-		} catch (e) {
-			console.log("Error handlePause: ", e)
-		}
+	
 	}
 	
 	const handlePauseFirst = async () => {
@@ -218,26 +217,43 @@ const AdminScreen = () => {
 		}
 	}
 	
+	const handleSetRevealed = async () => {
+		try {
+			const response = await setRevealed(!contractInfo.revealed, walletAddress)
+			console.log("handleSetRevealed", response)
+		} catch (e) {
+			console.log("Error setRevealed: ", e)
+		}
+	}
+	
 	const handleMintWhitelist = async (_amount) => {
 		setLoadingMintData(true);
-		const proofResponse = await getWalletProof(walletAddress);
-		console.log("Proof response: ", proofResponse)
-		if (!proofResponse.data.proof) {
-			setLoadingMintData(false)
-			handleError("Not in Whitelist");
-		} else {
-			const rawProof = proofResponse.data.proof.proof
-			console.log("raw: ", rawProof)
-			const response = await mintWhitelist(_amount, rawProof);
-			setLoadingMintData(false)
-			
-			if (response.error) {
-				console.log("mintWhitelist error: ", response.error)
-				handleError(response.error)
+		try {
+			const signatureResponse = await getWalletSignature(walletAddress);
+			if (!signatureResponse.signature) {
+				setLoadingMintData(false)
+				handleError("Not in Whitelist");
 			} else {
-				verifyTransaction(response.transaction)
+				const response = await mintWhitelist(_amount, signatureResponse.signature);
+				setLoadingMintData(false)
+				
+				if (response.error) {
+					console.log("mintWhitelist error: ", response.error)
+					handleError(response.error)
+				} else {
+					verifyTransaction(response.transaction)
+				}
 			}
+		} catch (e) {
+			console.log("Error mint whitelist: ", e)
+			setLoadingMintData(false)
 		}
+		
+		
+	}
+	
+	const onAddressSubmit = async (_addressArray, _amount) => {
+		console.log("onAddressSubmit: ", _addressArray)
 		
 	}
 	
@@ -268,6 +284,11 @@ const AdminScreen = () => {
 								{contractInfo?.pausedWhitelist ? "Resume Whitelist" : "Pause Whitelist"}
 							</button>
 							<h1>Not Revealed URI</h1>
+							<button
+								className="admin-button"
+								onClick={handleSetRevealed}>
+								{contractInfo?.pausedWhitelist ? "Set Revealed" : "Set Not revealed"}
+							</button>
 							<input
 								name="fname"
 								className="input-container"
@@ -278,7 +299,8 @@ const AdminScreen = () => {
 							
 							<button
 								className="admin-button"
-								onClick={handleSetNotRevealedURIPressed}>Update Not revealed URI</button>
+								onClick={handleSetNotRevealedURIPressed}>Update Not revealed URI
+							</button>
 							<h1>Token URI</h1>
 							<input
 								name="fname"
@@ -290,8 +312,10 @@ const AdminScreen = () => {
 							
 							<button
 								className="admin-button"
-								onClick={handleSetURIPressed}>Update Token URI</button>
-							<RootForm onSubmit={handleSubmitRoot} />
+								onClick={handleSetURIPressed}>Update Token URI
+							</button>
+							<RootForm onSubmit={handleSubmitRoot}/>
+							<WhitelistForm onSubmit={onAddressSubmit}/>
 							<MintSection
 								show={contractInfo}
 								loading={loadingMintData}
@@ -310,7 +334,8 @@ const AdminScreen = () => {
 							<div className="admin-text">No transaction record is created on the ower's wallet</div>
 							<button
 								className="admin-button"
-								onClick={() => handleWithdraw()}>Withdraw</button>
+								onClick={() => handleWithdraw()}>Withdraw
+							</button>
 						</>
 					)
 					
