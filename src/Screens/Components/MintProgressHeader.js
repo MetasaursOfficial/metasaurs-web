@@ -9,7 +9,7 @@ const MintProgressHeader = ({show, link}) => {
 	
 	return (
 		<div className="mint-progress-header">
-			<div className="mint-progress-text">{`Your Oki's mint is in progress... You can see the transaction progress here:`}</div>
+			<div className="mint-progress-text">{`Metasaurs Punks mint in progress. You can see the transaction status here`}</div>
 			<a  className="mint-progress-text" href={link} target='_blank'>{link}</a>
 		</div>
 	)

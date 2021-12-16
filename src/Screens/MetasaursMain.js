@@ -15,11 +15,12 @@ import {connectWallet, getCurrentWalletConnected} from "../Integrations/Wallet";
 import {
 	confirmEtherTransaction,
 	getContractData,
-	mintFirst,
-	mintPublic
+	mintNFT,
+	mintWhitelist,
 } from "../Integrations/Contracts/ContractManager";
 import MintMain from "./Components/MintMain";
 import ErrorModal from "./Modals/ErrorModal";
+import {getWalletSignature} from "../Integrations/API";
 
 const preSale = "Pre-Sale Coming Soon";
 const whitelist = "Whitelist Pre-Sale";
@@ -202,30 +203,43 @@ const MetasaursMain = () => {
 		}
 	}
 	
-	const handleMintFist = async (_amount) => {
+	const handleMint = async (_amount) => {
 		setLoadingMintData(true);
-		const response = await mintFirst(_amount);
+		const response = await mintNFT(_amount);
 		setLoadingMintData(false)
 		
 		if (response.error) {
-			console.log("handleMintFist error: ", response.error)
+			console.log("handleMint error: ", response.error)
 			handleError(response.error)
 		} else {
 			verifyTransaction(response.transaction)
 		}
 	}
 	
-	const handleMintPublic = async (_amount) => {
+	
+	const handleMintWhitelist = async (_amount) => {
 		setLoadingMintData(true);
-		const response = await mintPublic(_amount);
-		setLoadingMintData(false)
-		
-		if (response.error) {
-			console.log("mintPublic error: ", response.error)
-			handleError(response.error)
-		} else {
-			verifyTransaction(response.transaction)
+		try {
+			const signatureResponse = await getWalletSignature(walletAddress);
+			if (!signatureResponse.signature) {
+				setLoadingMintData(false)
+				handleError("Not in Whitelist");
+			} else {
+				const response = await mintWhitelist(_amount, signatureResponse.signature);
+				setLoadingMintData(false)
+				
+				if (response.error) {
+					console.log("mintWhitelist error: ", response.error)
+					handleError(response.error)
+				} else {
+					verifyTransaction(response.transaction)
+				}
+			}
+		} catch (e) {
+			console.log("Error mint whitelist: ", e)
+			setLoadingMintData(false)
 		}
+		
 	}
 	
 	return (
@@ -260,26 +274,30 @@ const MetasaursMain = () => {
 					<Typography variant="h5" className="white-coming">
 						{publicTime}
 					</Typography>
+					
 					{
-						contractInfo && contractInfo.hasTokens && (
+						contractInfo && !contractInfo.paused && (
 							<MintMain
 								loading={loadingMintData}
-								onPress={handleMintPublic}
-								paused={contractInfo?.pausedPublic}
-								label="Mint Public"
+								onPress={handleMint}
+								paused={contractInfo?.paused}
+								label="Mint Your Metasaur"
 							/>
 						)
 					}
+					
+					
 					{
-						contractInfo && !contractInfo.hasTokens && (
+						contractInfo && !contractInfo.pausedWhitelist && (
 							<MintMain
 								loading={loadingMintData}
-								onPress={handleMintFist}
-								paused={contractInfo?.pausedFirst}
-								label="Mint Your First Metasaur"
+								onPress={handleMintWhitelist}
+								paused={contractInfo?.pausedWhitelist}
+								label="Whitelist Mint"
 							/>
 						)
 					}
+				
 				
 				</Grid>
 				
