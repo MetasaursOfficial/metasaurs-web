@@ -21,6 +21,7 @@ import {
 import MintMain from "./Components/MintMain";
 import ErrorModal from "./Modals/ErrorModal";
 import {getWalletSignature} from "../Integrations/API";
+import TotalTokens from "./Components/TotalTokens";
 
 const preSale = "Minting is Live!";
 const whitelist = "Whitelist Pre-Sale";
@@ -274,7 +275,7 @@ const MetasaursMain = () => {
 					<Typography variant="h5" className="white-coming">
 						{publicTime}
 					</Typography>
-					
+					<TotalTokens />
 					{
 						contractInfo && !contractInfo.paused && (
 							<MintMain
