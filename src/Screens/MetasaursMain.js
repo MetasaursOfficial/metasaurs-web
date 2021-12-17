@@ -22,7 +22,7 @@ import MintMain from "./Components/MintMain";
 import ErrorModal from "./Modals/ErrorModal";
 import {getWalletSignature} from "../Integrations/API";
 
-const preSale = "Pre-Sale Coming Soon";
+const preSale = "Minting is Live!";
 const whitelist = "Whitelist Pre-Sale";
 const day = "Thursday, Dec 16th @ 12:00AM EST";
 const day1 = "(Until 2:00PmEST on Friday, December 17th)";
