@@ -32,16 +32,14 @@ const WhitelistForm = ({onSubmit}) => {
 	
 	return (
 		<div className="whitelist-form-container">
-			<div className="whitelist-text">Enter the addresses separated by comas</div>
-			<p className="whitelist-text">0xD3c...23cf625a,0x5ccDaaF0A...aDd35727,0xC21F359...783422</p>
-			<div className="whitelist-text">The last one does not carry coma</div>
-			<textarea
+			<h4 className="whitelist-text">The last one does not carry coma</h4>
+			<input
 				name="address_input"
 				value={address}
 				onChange={onAddressChange}
 				className="address-input"
 			/>
-			<div className="whitelist-text">Enter the number of tokens allowed to mint for this addresses</div>
+			<div className="whitelist-text">Enter the number of tokens to mint to</div>
 			<input
 				name="amount_input"
 				type="number"
