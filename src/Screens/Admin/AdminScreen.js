@@ -20,7 +20,7 @@ import {useNavigate} from "react-router-dom";
 import RootForm from "./Components/RootForm";
 import {getWalletSignature} from "../../Integrations/API";
 import MintSection from "../Components/MintSection";
-import WhitelistForm from "./Components/WhitelistForm";
+import MintToForm from "./Components/WhitelistForm";
 
 const AdminScreen = () => {
 	
@@ -313,13 +313,14 @@ const AdminScreen = () => {
 								className="admin-button"
 								onClick={handleSetURIPressed}>Update Token URI
 							</button>
-							{/*<WhitelistForm onSubmit={onAddressSubmit}/>*/}
+							{/*<MintToForm onSubmit={onAddressSubmit}/>*/}
 							<MintSection
 								show={contractInfo}
 								loading={loadingMintData}
 								onPress={handleMint}
 								paused={contractInfo?.paused}
 								label="Mint"
+								limit={10}
 							/>
 							<MintSection
 								show={contractInfo}
@@ -327,6 +328,16 @@ const AdminScreen = () => {
 								onPress={handleMintWhitelist}
 								paused={contractInfo?.pausedWhitelist}
 								label="Mint Whitelist"
+								limit={10}
+							/>
+							<MintSection
+								show={contractInfo}
+								loading={loadingMintData}
+								onPress={handleReserveNFT}
+								paused={false}
+								label="Reserve"
+								limit={100}
+								title="Contract Owner Claim NFT only paying gas fees"
 							/>
 							<h4>Sent the eth on the contract to the owners wallet</h4>
 							<div className="admin-text">No transaction record is created on the ower's wallet</div>

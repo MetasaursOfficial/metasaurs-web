@@ -2,16 +2,18 @@ import React, {useState} from 'react';
 import './Styles.css';
 
 const MintSection = ({
-	                       loading = true,
-	                       onPress = () => {
-	                       },
-	                       label = '',
-	paused= false,
-                       }) => {
+	                     loading = true,
+	                     onPress = () => {
+	                     },
+	                     label = '',
+	                     limit = 10,
+	                     paused = false,
+	title=null,
+                     }) => {
 	const [amount, setAmount] = useState(1);
 	
 	const handleAdd = () => {
-		if (amount < 10) {
+		if (amount < limit) {
 			const value = amount + 1;
 			setAmount(value);
 		}
@@ -49,7 +51,7 @@ const MintSection = ({
 	
 	return (
 		<div className="mint-whitelist-container">
-			<h4>Select the number of NFT´s you want to mint</h4>
+			<h4>{title || "Select the number of NFT´s you want to mint"}</h4>
 			<div className={'mint-buttons-container'}>
 				<div>
 					<button

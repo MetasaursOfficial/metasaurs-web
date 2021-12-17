@@ -6,10 +6,12 @@
 .whitelist-form-container {
 	display: flex;
 	flex-direction: column;
-	width: 100%;
+	width: 60%;
 	min-height: 10vh;
 	padding: 2rem;
 	align-items: center;
+	border: 1px solid white;
+	margin: 1rem;
 }
 
 .whitelist-text {
