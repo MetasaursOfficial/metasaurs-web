@@ -67,6 +67,19 @@ export const getContractData = async (_address) => {
 	
 }
 
+export const getContractCount = async () => {
+	try {
+		window.contract = await new web3.eth.Contract(contractABI, contractAddress);
+		const totalSupply = await window.contract.methods.totalSupply().call();
+		console.log("totalSupply: ", totalSupply)
+		return totalSupply
+		
+	} catch (e) {
+		console.log('getContractCount error: ', e)
+		return 0
+	}
+}
+
 export const setPausedFirst = (_value, _address) => {
 	return new Promise(async resolve => {
 		try {
