@@ -244,6 +244,8 @@ export const mintWhitelist = async (_amount, _signature) => {
 	} catch (e) {
 	
 	}
+	const suggestedGas = 170000  * _amount
+	const gasHex = Number((suggestedGas)).toString(16)
 	
 	let valueHex;
 	
@@ -259,6 +261,7 @@ export const mintWhitelist = async (_amount, _signature) => {
 		to: contractAddress,
 		from: window.ethereum.selectedAddress,
 		value: valueHex,
+		gas: gasHex,
 		data: window.contract.methods.whitelistMint(_amount, _amount, _signature).encodeABI(),
 	}
 	
@@ -284,6 +287,7 @@ export const getPriceForMultiple = (_amount, value) => {
 	const baseMultiple = 60000000000000000;
 	const partial = multiplier * baseMultiple;
 	const totalValue = value + partial;
+	console.log("getPriceForMultiple: ", totalValue);
 	
 	return Number((totalValue)).toString(16)
 }
