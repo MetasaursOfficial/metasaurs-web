@@ -12,7 +12,7 @@ const TotalTokens = () => {
 		async function getTotalTokenCount() {
 			const response = await getContractCount()
 			console.log("Token Count: " + response)
-			const message = `${response} / 19999`
+			const message = `${response} / 11,111`
 			setTokenCount(message)
 		}
 		
@@ -23,7 +23,7 @@ const TotalTokens = () => {
 		async function getTotalTokenCount() {
 			const response = await getContractCount()
 			console.log("Token Count: " + response)
-			const message = `${response} / 19999`
+			const message = `${response} / 11,111`
 			setTokenCount(message)
 		}
 		
